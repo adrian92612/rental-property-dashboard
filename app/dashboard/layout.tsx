@@ -1,3 +1,5 @@
+import { logout } from "../lib/actions";
+
 interface Props {
   children: React.ReactNode;
 }
@@ -5,7 +7,11 @@ interface Props {
 const DashboardLayout = async ({ children }: Props) => {
   return (
     <main className="h-full flex">
-      <nav></nav>
+      <nav>
+        <form action={logout}>
+          <button>Sign Out</button>
+        </form>
+      </nav>
       <section>{children}</section>
     </main>
   );
