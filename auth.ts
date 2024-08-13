@@ -4,7 +4,6 @@ import Google from "next-auth/providers/google";
 import prisma from "@/app/lib/prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { AdapterUser } from "next-auth/adapters";
-import email from "next-auth/providers/email";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {

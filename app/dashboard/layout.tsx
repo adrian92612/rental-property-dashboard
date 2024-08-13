@@ -1,4 +1,5 @@
 import { logout } from "../lib/actions";
+import { SideBar } from "../ui/dashboard/sidebar";
 
 interface Props {
   children: React.ReactNode;
@@ -7,12 +8,8 @@ interface Props {
 const DashboardLayout = async ({ children }: Props) => {
   return (
     <main className="h-full flex">
-      <nav>
-        <form action={logout}>
-          <button>Sign Out</button>
-        </form>
-      </nav>
-      <section>{children}</section>
+      <SideBar />
+      <section className="grow">{children}</section>
     </main>
   );
 };
