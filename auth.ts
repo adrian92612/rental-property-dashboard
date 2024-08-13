@@ -22,6 +22,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const pathname = nextUrl.pathname;
+
+      const redirectIfLoggedIn = ["/", "/login", "/register"];
+      const isOnProtectedPage = pathname.startsWith("/dashboard");
+
+      if (isLoggedIn && redirectIfLoggedIn.includes(pathname)) {
+        return Response.redirect(new URL("/dashboard", nextUrl));
+      }
+      if (!isLoggedIn && isOnProtectedPage) {
+        return Response.redirect(new URL("/login", nextUrl));
+      }
+
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) token.id = user.id;
       return { id: token.id };
