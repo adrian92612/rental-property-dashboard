@@ -36,10 +36,13 @@ export const AddUnitForm = ({ properties }: Props) => {
           </option>
         ))}
       </select>
+
       <label htmlFor="number">Unit No.</label>
       <input type="text" name="number" id="number" defaultValue={state.number} />
+
       <label htmlFor="rent">Monthly Rent</label>
       <input type="number" name="rent" id="rent" min={0} defaultValue={state.rent} />
+
       <label htmlFor="dueDate">Due Date</label>
       <select name="dueDate" id="dueDate" required defaultValue={state.dueDate}>
         <option value="" disabled>
@@ -51,7 +54,9 @@ export const AddUnitForm = ({ properties }: Props) => {
           </option>
         ))}
       </select>
+
       <button type="submit">{isPending ? "Adding..." : "Add Unit"}</button>
+
       {state.error && <span className="text-red-400">{state.error}</span>}
       {state.success && <span className="text-green-400">{state.success}</span>}
     </form>

@@ -67,8 +67,8 @@ model Tenant {
   leaseStart  DateTime
   leaseEnd    DateTime
 
-  Unit   Unit?  @relation(fields: [unitId], references: [id])
-  unitId String @unique
+  Unit   Unit?   @relation(fields: [unitId], references: [id])
+  unitId String? @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

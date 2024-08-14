@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { logout } from "../lib/actions";
 import { SideBar } from "../ui/dashboard/sidebar";
+import Loading from "./loading";
 
 interface Props {
   children: React.ReactNode;
@@ -9,7 +11,9 @@ const DashboardLayout = async ({ children }: Props) => {
   return (
     <main className="h-full flex">
       <SideBar />
-      <section className="grow">{children}</section>
+      <Suspense fallback={<Loading />}>
+        <section className="grow">{children}</section>
+      </Suspense>
     </main>
   );
 };

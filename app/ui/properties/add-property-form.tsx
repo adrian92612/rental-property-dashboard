@@ -22,6 +22,7 @@ export const AddPropertyForm = () => {
         placeholder="Prima Building"
         defaultValue={state.name}
       />
+
       <label htmlFor="address">Address</label>
       <input
         type="text"
@@ -30,9 +31,12 @@ export const AddPropertyForm = () => {
         placeholder="123 some street some place, some city"
         defaultValue={state.address}
       />
+
       <label htmlFor="units">Number of Unit/s</label>
       <input type="number" name="units" id="units" min={1} step={1} defaultValue={state.units} />
+
       <button type="submit">Add Property</button>
+
       {state.error && <span className="text-red-400">{state.error}</span>}
       {state.succcess && <span className="text-green-400">{state.success}</span>}
     </form>
