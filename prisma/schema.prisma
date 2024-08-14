@@ -46,7 +46,8 @@ model Property {
 model Unit {
   id         String  @id
   number     String
-  rentAmount Float
+  rentAmount Float   @default(0)
+  dueDate    Int?
   isOccupied Boolean @default(false)
   propertyId String
 

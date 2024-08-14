@@ -1,7 +1,6 @@
 "use client";
 
 import { addProperty } from "@/app/lib/actions";
-import { error } from "console";
 import { useActionState } from "react";
 
 export const AddPropertyForm = () => {
@@ -9,6 +8,8 @@ export const AddPropertyForm = () => {
     name: "",
     address: "",
     units: 1,
+    error: "",
+    success: "",
   });
 
   return (
@@ -32,7 +33,8 @@ export const AddPropertyForm = () => {
       <label htmlFor="units">Number of Unit/s</label>
       <input type="number" name="units" id="units" min={1} step={1} defaultValue={state.units} />
       <button type="submit">Add Property</button>
-      {state.message && <span className="text-red-300">{state.message}</span>}
+      {state.error && <span className="text-red-400">{state.error}</span>}
+      {state.succcess && <span className="text-green-400">{state.success}</span>}
     </form>
   );
 };

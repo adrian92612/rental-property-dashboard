@@ -4,6 +4,9 @@ import { auth, signIn, signOut } from "@/auth";
 import prisma from "./prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
+import { Property, Unit } from "@prisma/client";
+import { create } from "domain";
+import { error } from "console";
 
 export const login = async (formData: FormData) => {
   const provider = formData.get("action") as string | null;
@@ -19,12 +22,23 @@ export const getUserId = async () => {
   return session?.user?.id as string;
 };
 
-export const getProperties = async (userId: string) => {
-  const properties = await prisma.property.findMany({
+export interface PropertyWithUnits extends Property {
+  units: Unit[];
+}
+
+export const getProperties = async () => {
+  const userId = await getUserId();
+  return await prisma.property.findMany({
+    where: { userId: userId },
+  });
+};
+
+export const getPropertiesWithUnits = async () => {
+  const userId = await getUserId();
+  return await prisma.property.findMany({
     where: { userId: userId },
     include: { units: true },
   });
-  return properties;
 };
 
 export const getUnits = async (propertyId: string) => {
@@ -34,8 +48,6 @@ export const getUnits = async (propertyId: string) => {
 
 export const addProperty = async (prevState: any, formData: FormData) => {
   try {
-    console.log(formData);
-    console.log(prevState);
     const userId = await getUserId();
     const name = formData.get("name") as string;
     const address = formData.get("address") as string;
@@ -52,28 +64,56 @@ export const addProperty = async (prevState: any, formData: FormData) => {
       },
     });
 
-    const unitPromises = [];
-    for (let i = 1; i <= units; i++) {
-      const unitId = createId();
-      unitPromises.push(
-        prisma.unit.create({
-          data: {
-            id: unitId,
-            number: `Unit ${i} - ${unitId}}`,
-            rentAmount: 0,
-            property: {
-              connect: { id: property.id },
-            },
-          },
-        })
-      );
-    }
+    const unitData = Array.from({ length: units }, (_, i) => ({
+      id: createId(),
+      number: `Unit ${i + 1}`,
+      rentAmount: 0,
+      propertyId: property.id,
+    }));
 
-    await Promise.all(unitPromises);
+    await prisma.unit.createMany({ data: unitData });
+
     revalidatePath("/dashboard/properties");
-    return { message: `${name} with ${units} units created successfully.` };
+    return { success: `${name} with ${units} units created successfully.`, error: "" };
   } catch (error) {
     console.log(error);
-    return { ...prevState, message: "Failed to create property and unit/s." };
+    return { ...prevState, error: "Failed to create property and unit/s.", success: "" };
+  }
+};
+
+export const addUnit = async (prevState: any, formData: FormData) => {
+  try {
+    const propertyId = formData.get("propertyId") as string;
+    const number = formData.get("number") as string;
+    const rentAmount = parseFloat(formData.get("rent") as string);
+    const dueDate = parseInt(formData.get("dueDate") as string);
+
+    if (!propertyId) return { ...prevState, error: "Property Id not found", success: "" };
+    if (!number) return { ...prevState, error: "Unit Number not found", success: "" };
+
+    const property = await prisma.property.findUnique({
+      where: { id: propertyId },
+      select: { name: true },
+    });
+
+    if (!property) return { ...prevState, error: "Property not found.", success: "" };
+
+    await prisma.unit.create({
+      data: {
+        id: createId(),
+        number,
+        rentAmount,
+        dueDate,
+        property: {
+          connect: { id: propertyId },
+        },
+      },
+    });
+
+    revalidatePath("/dashboard/units");
+    return { success: `${number} is added to ${property.name}` };
+  } catch (error) {
+    console.log("Failed to add unit: ", error);
+    return { ...prevState, error: "Failed to add unit" };
   }
 };
