@@ -56,6 +56,9 @@ export const getUnit = async (unitId: string) => {
 
 export const getTenants = async () => await prisma.tenant.findMany();
 
+export const getTenant = async (tenantId: string) =>
+  await prisma.tenant.findUnique({ where: { id: tenantId } });
+
 export const addProperty = async (prevState: any, formData: FormData) => {
   try {
     const userId = await getUserId();
