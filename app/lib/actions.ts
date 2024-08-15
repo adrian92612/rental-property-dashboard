@@ -6,6 +6,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
 import { Property, Unit } from "@prisma/client";
 import { error } from "console";
+import { redirect } from "next/navigation";
 
 export const login = async (formData: FormData) => {
   const provider = formData.get("action") as string | null;
@@ -38,6 +39,10 @@ export const getPropertiesWithUnits = async () => {
     where: { userId: userId },
     include: { units: true },
   });
+};
+
+export const getProperty = async (propertyId: string) => {
+  return await prisma.property.findUnique({ where: { id: propertyId }, include: { units: true } });
 };
 
 export const getUnits = async (propertyId: string) => {
@@ -160,5 +165,51 @@ export const addTenant = async (prevState: any, formData: FormData) => {
   } catch (error) {
     console.log("Failed to add tenant: ", error);
     return { ...prevState, error: "Failed to add tenant" };
+  }
+};
+
+export const deleteProperty = async (propertyId: string) => {
+  try {
+    await prisma.$transaction(async (prisma) => {
+      // Delete all units associated with the property
+      await prisma.unit.deleteMany({ where: { propertyId } });
+
+      // Delete the property itself
+      await prisma.property.delete({ where: { id: propertyId } });
+    });
+
+    return {
+      success: true,
+      message: `Property ${propertyId} and associated units deleted successfully.`,
+    };
+  } catch (error) {
+    console.error("Failed to delete property: ", error);
+    return { success: false, message: `Failed to delete property ${propertyId}.`, error };
+  }
+};
+
+export const deleteUnit = async (unitId: string) => {
+  try {
+    await prisma.unit.delete({ where: { id: unitId } });
+    return {
+      success: true,
+      message: `Unit ${unitId} deleted successfully.`,
+    };
+  } catch (error) {
+    console.error("Failed to delete unit: ", error);
+    return { success: false, message: `Failed to delete unit ${unitId}.`, error };
+  }
+};
+
+export const deleteTenant = async (tenantId: string) => {
+  try {
+    await prisma.tenant.delete({ where: { id: tenantId } });
+    return {
+      success: true,
+      message: `Tenant ${tenantId} deleted successfully.`,
+    };
+  } catch (error) {
+    console.error("Failed to delete tenant: ", error);
+    return { success: false, message: `Failed to delete tenant ${tenantId}.`, error };
   }
 };
