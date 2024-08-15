@@ -1,20 +1,22 @@
+import { deleteProperty } from "@/app/lib/actions";
 import { Property, Unit } from "@prisma/client";
 import Link from "next/link";
 
 interface PropertyAttributeProps {
   label: string;
   items: { id: string; value: string }[];
-  className?: string;
-  labelClass?: string;
 }
 
-const PropertyAttribute = ({ label, items, className, labelClass }: PropertyAttributeProps) => (
+const PropertyAttribute = ({ label, items }: PropertyAttributeProps) => (
   <div className="flex flex-col gap-4 p-2">
     <h2 className="font-bold text-lg">{label}</h2>
     {items.map(({ id, value }) => (
-      <Link key={id} href={`/dashboard/properties/${id}`} className="">
-        <p>{value}</p>
-      </Link>
+      <div key={id}>
+        <Link href={`/dashboard/properties/${id}`} className="">
+          <p>{value}</p>
+        </Link>
+        {label === "Unit/s" && <button onClick={() => deleteProperty(id)}>Delete</button>}
+      </div>
     ))}
   </div>
 );
