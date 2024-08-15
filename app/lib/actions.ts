@@ -50,6 +50,10 @@ export const getUnits = async (propertyId: string) => {
   return units;
 };
 
+export const getUnit = async (unitId: string) => {
+  return await prisma.unit.findUnique({ where: { id: unitId }, include: { tenant: true } });
+};
+
 export const getTenants = async () => await prisma.tenant.findMany();
 
 export const addProperty = async (prevState: any, formData: FormData) => {
