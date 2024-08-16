@@ -41,8 +41,13 @@ export const getPropertiesWithUnits = async () => {
   });
 };
 
-export const getProperty = async (propertyId: string) => {
-  return await prisma.property.findUnique({ where: { id: propertyId }, include: { units: true } });
+export const getProperty = async (propertyId: string, withUnits: boolean = true) => {
+  if (withUnits)
+    return await prisma.property.findUnique({
+      where: { id: propertyId },
+      include: { units: true },
+    });
+  return await prisma.property.findUnique({ where: { id: propertyId } });
 };
 
 export const getUnits = async (propertyId: string) => {
@@ -59,18 +64,24 @@ export const getTenants = async () => await prisma.tenant.findMany();
 export const getTenant = async (tenantId: string) =>
   await prisma.tenant.findUnique({ where: { id: tenantId } });
 
-export const addProperty = async (prevState: any, formData: FormData) => {
+export const upsertProperty = async (prevState: any, formData: FormData) => {
   try {
     const userId = await getUserId();
     const name = formData.get("name") as string;
     const address = formData.get("address") as string;
     const units = parseInt(formData.get("units") as string, 10);
+    const propertyId = formData.get("propertyId") as string | undefined;
 
     if (!name) return { ...prevState, error: "Property name is required", success: "" };
     if (!address) return { ...prevState, error: "Property address is required", success: "" };
 
-    const property = await prisma.property.create({
-      data: {
+    const property = await prisma.property.upsert({
+      where: { id: propertyId ?? "" },
+      update: {
+        name,
+        address,
+      },
+      create: {
         id: createId(),
         name,
         address,
@@ -79,6 +90,10 @@ export const addProperty = async (prevState: any, formData: FormData) => {
         },
       },
     });
+
+    if (propertyId) {
+      return { ...prevState, error: "", success: `${property.name} has been successfully updated` };
+    }
 
     const unitData = Array.from({ length: units }, (_, i) => ({
       id: createId(),
@@ -93,7 +108,7 @@ export const addProperty = async (prevState: any, formData: FormData) => {
     return { success: `${name} with ${units} units created successfully.`, error: "" };
   } catch (error) {
     console.log(error);
-    return { ...prevState, error: "Failed to create property and unit/s.", success: "" };
+    return { ...prevState, error: "Failed to create/update property and unit/s.", success: "" };
   }
 };
 

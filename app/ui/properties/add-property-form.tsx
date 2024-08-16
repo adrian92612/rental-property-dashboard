@@ -1,10 +1,10 @@
 "use client";
 
-import { addProperty } from "@/app/lib/actions";
+import { upsertProperty } from "@/app/lib/actions";
 import { useActionState } from "react";
 
 export const AddPropertyForm = () => {
-  const [state, action, isPending] = useActionState(addProperty, {
+  const [state, action, isPending] = useActionState(upsertProperty, {
     name: "",
     address: "",
     units: 1,
