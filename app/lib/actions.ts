@@ -4,9 +4,15 @@ import { auth, signIn, signOut } from "@/auth";
 import prisma from "./prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
-import { Property, Unit } from "@prisma/client";
-import { error } from "console";
-import { redirect } from "next/navigation";
+import { Property, Tenant, Unit } from "@prisma/client";
+
+export interface PropertyWithUnits extends Property {
+  units: Unit[];
+}
+
+export interface UnitWithTenant extends Unit {
+  tenant: Tenant;
+}
 
 export const login = async (formData: FormData) => {
   const provider = formData.get("action") as string | null;
@@ -21,10 +27,6 @@ export const getUserId = async () => {
   const session = await auth();
   return session?.user?.id as string;
 };
-
-export interface PropertyWithUnits extends Property {
-  units: Unit[];
-}
 
 export const getProperties = async () => {
   const userId = await getUserId();
@@ -41,13 +43,17 @@ export const getPropertiesWithUnits = async () => {
   });
 };
 
-export const getProperty = async (propertyId: string, withUnits: boolean = true) => {
-  if (withUnits)
-    return await prisma.property.findUnique({
+export const getProperty = async (
+  propertyId: string,
+  withUnits: boolean = true
+): Promise<Property | PropertyWithUnits> => {
+  if (withUnits) {
+    return (await prisma.property.findUnique({
       where: { id: propertyId },
       include: { units: true },
-    });
-  return await prisma.property.findUnique({ where: { id: propertyId } });
+    })) as PropertyWithUnits;
+  }
+  return (await prisma.property.findUnique({ where: { id: propertyId } })) as Property;
 };
 
 export const getUnits = async (propertyId: string) => {
@@ -112,25 +118,46 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
   }
 };
 
-export const addUnit = async (prevState: any, formData: FormData) => {
+export const upsertUnit = async (prevState: any, formData: FormData) => {
+  const unitId = formData.get("unitId") as string | undefined;
+  const tenantId = formData.get("tenantId") as string | undefined;
+  const propertyId = formData.get("propertyId") as string;
+  const number = formData.get("number") as string;
+  const rentAmount = parseFloat(formData.get("rentAmount") as string);
+  const dueDate = parseInt(formData.get("dueDate") as string);
+
+  const currentState = {
+    ...prevState,
+    number,
+    rentAmount,
+    dueDate,
+    tenantId,
+  };
+
+  if (!propertyId) return { ...currentState, error: "Property Id not found", success: "" };
+  if (!number) return { ...currentState, error: "Unit Number not found", success: "" };
+
   try {
-    const propertyId = formData.get("propertyId") as string;
-    const number = formData.get("number") as string;
-    const rentAmount = parseFloat(formData.get("rent") as string);
-    const dueDate = parseInt(formData.get("dueDate") as string);
-
-    if (!propertyId) return { ...prevState, error: "Property Id not found", success: "" };
-    if (!number) return { ...prevState, error: "Unit Number not found", success: "" };
-
     const property = await prisma.property.findUnique({
       where: { id: propertyId },
       select: { name: true },
     });
 
-    if (!property) return { ...prevState, error: "Property not found.", success: "" };
+    if (!property) return { ...currentState, error: "Property not found.", success: "" };
 
-    await prisma.unit.create({
-      data: {
+    await prisma.unit.upsert({
+      where: { id: unitId ?? "" },
+      update: {
+        number,
+        rentAmount,
+        dueDate,
+        ...(tenantId && {
+          tenant: {
+            connect: { id: tenantId },
+          },
+        }),
+      },
+      create: {
         id: createId(),
         number,
         rentAmount,
@@ -141,11 +168,15 @@ export const addUnit = async (prevState: any, formData: FormData) => {
       },
     });
 
+    if (unitId) {
+      return { ...currentState, error: "", success: `${number} was successfully updated.` };
+    }
+
     revalidatePath("/dashboard/units");
     return { success: `${number} is added to ${property.name}` };
   } catch (error) {
     console.log("Failed to add unit: ", error);
-    return { ...prevState, error: "Failed to add unit" };
+    return { ...currentState, error: "Failed to add unit" };
   }
 };
 

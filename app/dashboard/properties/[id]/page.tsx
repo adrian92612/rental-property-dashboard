@@ -1,12 +1,14 @@
-import { getProperty } from "@/app/lib/actions";
+import { getProperty, PropertyWithUnits } from "@/app/lib/actions";
 import { DeleteBtn } from "@/app/ui/delete-button";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const PropertyDetailsPage = async ({ params }: { params: { id: string } }) => {
-  const property = await getProperty(params.id);
+  const property = (await getProperty(params.id)) as PropertyWithUnits;
+  console.log(property);
 
   if (!property) redirect("/dashboard/properties");
+
   return (
     <div>
       <h1>{property.name}</h1>

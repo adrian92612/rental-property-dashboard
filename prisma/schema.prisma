@@ -44,11 +44,10 @@ model Property {
 }
 
 model Unit {
-  id         String  @id
+  id         String @id
   number     String
-  rentAmount Float   @default(0)
+  rentAmount Float  @default(0)
   dueDate    Int?
-  isOccupied Boolean @default(false)
   propertyId String
 
   property Property @relation(fields: [propertyId], references: [id])

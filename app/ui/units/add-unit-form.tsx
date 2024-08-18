@@ -1,6 +1,6 @@
 "use client";
 
-import { addUnit } from "@/app/lib/actions";
+import { upsertUnit } from "@/app/lib/actions";
 import { Property, Unit } from "@prisma/client";
 import { useActionState } from "react";
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const AddUnitForm = ({ properties }: Props) => {
-  const [state, action, isPending] = useActionState(addUnit, {
+  const [state, action, isPending] = useActionState(upsertUnit, {
     propertyId: "",
     number: "",
     rent: 0,

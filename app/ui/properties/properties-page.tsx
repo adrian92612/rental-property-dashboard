@@ -1,13 +1,9 @@
 "use client";
 
-import { Property, Unit } from "@prisma/client";
 import { AddPropertyForm } from "./add-property-form";
 import { useState } from "react";
 import { PropertyCard } from "./properties-card";
-
-interface PropertyWithUnits extends Property {
-  units: Unit[];
-}
+import { PropertyWithUnits } from "@/app/lib/actions";
 
 interface Props {
   properties: PropertyWithUnits[];

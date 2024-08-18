@@ -13,7 +13,7 @@ const UnitDetailsPage = async ({ params }: { params: { id: string } }) => {
       <p>{JSON.stringify(unit)}</p>
       <div>
         <DeleteBtn id={unit.id} model="unit" />
-        <Link href={`dashboard/units/${unit.id}/edit`}>Edit</Link>
+        <Link href={`/dashboard/units/${unit.id}/edit`}>Edit</Link>
       </div>
     </div>
   );
