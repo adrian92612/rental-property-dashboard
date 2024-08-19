@@ -1,12 +1,10 @@
 "use client";
 
-"use client";
-
 import { useActionState } from "react";
-import { addTenant } from "@/app/lib/actions";
+import { upsertTenant } from "@/app/lib/actions";
 
 export const AddTenantForm = () => {
-  const [state, action, isPending] = useActionState(addTenant, {
+  const [state, action, isPending] = useActionState(upsertTenant, {
     firstName: "",
     lastName: "",
     email: "",

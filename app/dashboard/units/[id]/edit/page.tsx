@@ -10,7 +10,7 @@ const EditUnitPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="bg-slate-100 h-full flex flex-col items-center gap-4">
-      <h1 className="font-bold text-lg mt-10">{`Edit ${unit.number}`}</h1>
+      <h1 className="font-bold text-lg mt-10">Edit {unit.number}</h1>
       <EditUnitForm unit={unit} tenants={tenants} />
     </div>
   );

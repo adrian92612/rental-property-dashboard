@@ -14,6 +14,10 @@ export interface UnitWithTenant extends Unit {
   tenant: Tenant;
 }
 
+export interface TenantWithUnit extends Tenant {
+  unit: Unit;
+}
+
 export const login = async (formData: FormData) => {
   const provider = formData.get("action") as string | null;
   if (provider) await signIn(provider, { redirectTo: "/dashboard" });
@@ -68,7 +72,7 @@ export const getUnit = async (unitId: string) => {
 export const getTenants = async () => await prisma.tenant.findMany();
 
 export const getTenant = async (tenantId: string) =>
-  await prisma.tenant.findUnique({ where: { id: tenantId } });
+  await prisma.tenant.findUnique({ where: { id: tenantId }, include: { unit: true } });
 
 export const upsertProperty = async (prevState: any, formData: FormData) => {
   try {
@@ -180,29 +184,63 @@ export const upsertUnit = async (prevState: any, formData: FormData) => {
   }
 };
 
-export const addTenant = async (prevState: any, formData: FormData) => {
+export const upsertTenant = async (prevState: any, formData: FormData) => {
+  const tenantId = formData.get("tenantId") as string;
+  const unitId = formData.get("unitId") as string;
+  const firstName = formData.get("firstName") as string;
+  const lastName = formData.get("lastName") as string;
+  const email = formData.get("email") as string;
+  const phoneNumber = formData.get("phoneNumber") as string;
+  const leaseStartValue = formData.get("leaseStart") as string;
+  const leaseEndValue = formData.get("leaseEnd") as string;
+
+  // Convert dates to Date objects
+  const leaseStart = new Date(leaseStartValue);
+  const leaseEnd = new Date(leaseEndValue);
+
+  const currentState = {
+    ...prevState,
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    leaseStart,
+    leaseEnd,
+  };
+
+  // Check for missing values
+  if (!firstName) return { ...currentState, error: "First name is required" };
+  if (!lastName) return { ...currentState, error: "Last name is required" };
+  if (!email) return { ...currentState, error: "Email is required" };
+  if (!phoneNumber) return { ...currentState, error: "Phone number is required" };
+  if (!leaseStartValue) return { ...currentState, error: "Lease start date is required" };
+  if (!leaseEndValue) return { ...currentState, error: "Lease end date is required" };
+
   try {
-    const firstName = formData.get("firstName") as string;
-    const lastName = formData.get("lastName") as string;
-    const email = formData.get("email") as string;
-    const phoneNumber = formData.get("phoneNumber") as string;
-    const leaseStartValue = formData.get("leaseStart") as string;
-    const leaseEndValue = formData.get("leaseEnd") as string;
+    const existingTenant = await prisma.tenant.findUnique({
+      where: { email },
+    });
 
-    // Check for missing values
-    if (!firstName) return { ...prevState, error: "First name is required" };
-    if (!lastName) return { ...prevState, error: "Last name is required" };
-    if (!email) return { ...prevState, error: "Email is required" };
-    if (!phoneNumber) return { ...prevState, error: "Phone number is required" };
-    if (!leaseStartValue) return { ...prevState, error: "Lease start date is required" };
-    if (!leaseEndValue) return { ...prevState, error: "Lease end date is required" };
+    if (existingTenant && existingTenant.id !== tenantId) {
+      return { ...currentState, error: "A tenant with this email already exists." };
+    }
 
-    // Convert dates to Date objects
-    const leaseStart = new Date(leaseStartValue);
-    const leaseEnd = new Date(leaseEndValue);
-
-    await prisma.tenant.create({
-      data: {
+    await prisma.tenant.upsert({
+      where: { id: tenantId ?? "" },
+      update: {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        leaseStart,
+        leaseEnd,
+        ...(unitId && {
+          unit: {
+            connect: { id: unitId },
+          },
+        }),
+      },
+      create: {
         id: createId(),
         firstName,
         lastName,
@@ -213,11 +251,17 @@ export const addTenant = async (prevState: any, formData: FormData) => {
       },
     });
 
+    if (tenantId) {
+      console.log("called");
+      return { success: `${firstName} ${lastName} has been successfully updated.`, error: "" };
+    }
+
     revalidatePath("/dashboard/tenants");
     return { success: `${firstName} ${lastName} has been added to Tenants`, error: "" };
   } catch (error) {
-    console.log("Failed to add tenant: ", error);
-    return { ...prevState, error: "Failed to add tenant" };
+    const msg = `Failed to ${tenantId ? "update" : "add"} tenant`;
+    console.log(msg, error);
+    return { ...currentState, error: msg };
   }
 };
 
