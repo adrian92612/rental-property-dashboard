@@ -10,10 +10,10 @@ export const PropertyCard = ({ property }: Props) => {
   const { id, name, address, createdAt, units } = property;
 
   return (
-    <div className="flex border-t-2 p-2 mt-2">
+    <div className="flex border-t-4 p-2 mt-2 text-sm">
       <div className="w-[300px] h-[200px] flex justify-center items-center">Image Container</div>
       <div className="flex flex-col">
-        <h2 className="font-bold text-3xl ">{name}</h2>
+        <h2 className="font-bold text-2xl ">{name}</h2>
         <p className="flex items-center gap-2 ">
           <FaLocationDot /> {address}
         </p>
@@ -22,9 +22,9 @@ export const PropertyCard = ({ property }: Props) => {
         </p>
         <div></div>
         <p>
-          <strong>Created At:</strong> {createdAt.toISOString()}
+          <strong>Created At:</strong> {createdAt.toISOString().split("T")[0]}
         </p>
-        <Link href={`/dashboard/properties/${id}`} className="mt-auto w-fit">
+        <Link href={`/dashboard/properties/${id}`} className="mt-auto w-fit text-rose-400">
           View Details
         </Link>
       </div>

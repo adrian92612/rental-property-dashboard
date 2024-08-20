@@ -10,7 +10,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-/*
- create login button
-*/
