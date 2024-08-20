@@ -5,6 +5,8 @@ import { useState } from "react";
 import { PropertyCard } from "./property-card";
 import { PropertyWithUnits } from "@/app/lib/actions";
 import { MdAddHome } from "react-icons/md";
+import { PropertyForm } from "./property-form";
+import { IoIosCloseCircle } from "react-icons/io";
 
 interface Props {
   properties: PropertyWithUnits[];
@@ -15,7 +17,7 @@ export const PropertiesPageClient = ({ properties }: Props) => {
 
   const toggleForm = () => setShowForm(!showForm);
   return (
-    <div className="h-full flex text-gray-800 bg-gray-100">
+    <div className="h-full flex">
       <div className="grow border overflow-y-auto p-5">
         <h1 className="font-poppins text-5xl text-center mb-5 font-bold">PROPERTIES</h1>
         <button
@@ -38,10 +40,14 @@ export const PropertiesPageClient = ({ properties }: Props) => {
       </div>
       {showForm && (
         <div className="w-[400px] p-6">
-          <button onClick={toggleForm} className="font-bold bg-cyan-900">
+          <button
+            onClick={toggleForm}
+            className="flex items-center gap-1 hover:font-bold hover:text-gray-900"
+          >
+            <IoIosCloseCircle />
             Close
           </button>
-          <AddPropertyForm />
+          <PropertyForm property={null} />
         </div>
       )}
     </div>

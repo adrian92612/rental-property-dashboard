@@ -1,5 +1,6 @@
 import { getProperty } from "@/app/lib/actions";
 import { EditPropertyForm } from "@/app/ui/properties/edit-property-form";
+import { PropertyForm } from "@/app/ui/properties/property-form";
 import { redirect } from "next/navigation";
 
 const EditPropertyPage = async ({ params }: { params: { id: string } }) => {
@@ -8,9 +9,12 @@ const EditPropertyPage = async ({ params }: { params: { id: string } }) => {
   if (!property) redirect("/dashboard/properties");
 
   return (
-    <div className="bg-slate-100 h-full flex flex-col items-center gap-4">
+    <div className="h-full flex flex-col items-center gap-4">
       <h1 className="font-bold text-lg mt-10">{`Edit ${property.name}`}</h1>
-      <EditPropertyForm property={property} />
+      {/* <EditPropertyForm property={property} /> */}
+      <div className="w-[400px] border-cyan-900 border-2 p-4 rounded-lg">
+        <PropertyForm property={property} />
+      </div>
     </div>
   );
 };

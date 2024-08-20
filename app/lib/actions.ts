@@ -5,6 +5,7 @@ import prisma from "./prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
 import { Property, Tenant, Unit } from "@prisma/client";
+import { error } from "console";
 
 export interface PropertyWithUnits extends Property {
   units: Unit[];
@@ -82,8 +83,15 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     const units = parseInt(formData.get("units") as string, 10);
     const propertyId = formData.get("propertyId") as string | undefined;
 
-    if (!name) return { ...prevState, error: "Property name is required", success: "" };
-    if (!address) return { ...prevState, error: "Property address is required", success: "" };
+    prevState = {
+      name,
+      address,
+      units,
+    };
+
+    if (!name) return { ...prevState, error: "Property name is required" };
+    if (!address) return { ...prevState, error: "Property address is required" };
+    if (!propertyId && !units) return { ...prevState, error: "Minimum of 1 unit is required" };
 
     const property = await prisma.property.upsert({
       where: { id: propertyId ?? "" },
@@ -102,7 +110,7 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     });
 
     if (propertyId) {
-      return { ...prevState, error: "", success: `${property.name} has been successfully updated` };
+      return { updateSuccess: `${property.name} has been successfully updated` };
     }
 
     const unitData = Array.from({ length: units }, (_, i) => ({
