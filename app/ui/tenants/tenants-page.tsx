@@ -2,8 +2,8 @@
 
 import { Tenant } from "@prisma/client";
 import { useState } from "react";
-import { AddTenantForm } from "./add-tenant-form";
 import Link from "next/link";
+import { TenantForm } from "./tenant-form";
 
 interface Props {
   tenants: Tenant[];
@@ -23,7 +23,7 @@ export const TenantsPageClient = ({ tenants }: Props) => {
             return (
               <div key={tenant.id}>
                 <Link href={`/dashboard/tenants/${tenant.id}`}>{fullName}</Link>
-                <p>{JSON.stringify(tenant)}</p>
+                <div>{JSON.stringify(tenant)}</div>
               </div>
             );
           })
@@ -34,7 +34,7 @@ export const TenantsPageClient = ({ tenants }: Props) => {
       {showForm && (
         <div className="w-[400px] p-6">
           <button onClick={toggleForm}>Close</button>
-          <AddTenantForm />
+          <TenantForm tenant={null} />
         </div>
       )}
     </div>

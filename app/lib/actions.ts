@@ -256,8 +256,10 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
     });
 
     if (tenantId) {
-      console.log("called");
-      return { success: `${firstName} ${lastName} has been successfully updated.`, error: "" };
+      return {
+        updateSuccess: `${firstName} ${lastName} has been successfully updated.`,
+        error: "",
+      };
     }
 
     revalidatePath("/dashboard/tenants");

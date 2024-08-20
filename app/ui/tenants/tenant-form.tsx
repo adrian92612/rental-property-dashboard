@@ -2,21 +2,42 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { upsertTenant } from "@/app/lib/actions";
+import { Tenant } from "@prisma/client";
+import Link from "next/link";
 
 const formatDate = (date: Date) => date.toISOString().split("T")[0];
 
-export const AddTenantForm = () => {
-  const [state, action, isPending] = useActionState(upsertTenant, {});
+interface Props {
+  tenant: Tenant | null;
+}
 
-  const [term, setTerm] = useState(1);
-  const [termStart, setTermStart] = useState("");
-  const [termEnd, setTermEnd] = useState("");
+export const TenantForm = ({ tenant = null }: Props) => {
+  const [state, action, isPending] = useActionState(upsertTenant, {
+    ...(tenant && {
+      id: tenant.id,
+      firstName: tenant.firstName,
+      lastName: tenant.lastName,
+      email: tenant.email,
+      phoneNumber: tenant.phoneNumber,
+      termInMonths: tenant.termInMonths,
+      leaseStart: formatDate(tenant.leaseStart),
+      leaseEnd: formatDate(tenant.leaseEnd),
+      unitId: tenant.unitId,
+    }),
+  });
+
+  const [term, setTerm] = useState(tenant ? state.termInMonths : 1);
+  const [termStart, setTermStart] = useState(tenant ? state.leaseStart : "");
+  const [termEnd, setTermEnd] = useState(tenant ? state.leaseEnd : "");
 
   useEffect(() => {
+    console.log(state.success);
     if (state.success) {
+      console.log("use effect");
       setTerm(1);
       setTermStart("");
       setTermEnd("");
+      state.success = "";
     }
   });
 
@@ -50,8 +71,20 @@ export const AddTenantForm = () => {
     calculateTerm(term, newTermStart);
   };
 
+  if (tenant && state.updateSuccess) {
+    return (
+      <div>
+        <p>{state.updateSuccess}</p>
+        <Link href={`/dashboard/tenants/${tenant.id}`}>Go Back</Link>
+      </div>
+    );
+  }
+
   return (
     <form action={action} className="flex flex-col">
+      <input type="hidden" name="tenantId" defaultValue={state.id} />
+      <input type="hidden" name="unitId" defaultValue={state.unitId} />
+
       <label htmlFor="firstName">First Name</label>
       <input type="text" name="firstName" id="firstName" defaultValue={state.firstName} />
 
@@ -88,7 +121,15 @@ export const AddTenantForm = () => {
       <label htmlFor="leaseEnd">Lease End</label>
       <input type="date" name="leaseEnd" id="leaseEnd" readOnly value={termEnd} />
 
-      <button type="submit">{isPending ? "Adding..." : "Add Tenant"}</button>
+      <button type="submit">
+        {isPending
+          ? tenant
+            ? "Updating..."
+            : "Adding..."
+          : tenant
+          ? "Update Tenant"
+          : "Add Tenant"}
+      </button>
 
       {state.error && <span className="text-red-400">{state.error}</span>}
       {state.success && <span className="text-green-400">{state.success}</span>}
