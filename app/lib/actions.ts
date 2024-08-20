@@ -193,6 +193,7 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
   const phoneNumber = formData.get("phoneNumber") as string;
   const leaseStartValue = formData.get("leaseStart") as string;
   const leaseEndValue = formData.get("leaseEnd") as string;
+  const termInMonths = parseInt(formData.get("termInMonths") as string);
 
   // Convert dates to Date objects
   const leaseStart = new Date(leaseStartValue);
@@ -206,6 +207,7 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
     phoneNumber,
     leaseStart,
     leaseEnd,
+    termInMonths,
   };
 
   // Check for missing values
@@ -232,6 +234,7 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
         lastName,
         email,
         phoneNumber,
+        termInMonths,
         leaseStart,
         leaseEnd,
         ...(unitId && {
@@ -246,6 +249,7 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
         lastName,
         email,
         phoneNumber,
+        termInMonths,
         leaseStart,
         leaseEnd,
       },

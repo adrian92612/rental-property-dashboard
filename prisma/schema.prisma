@@ -58,13 +58,14 @@ model Unit {
 }
 
 model Tenant {
-  id          String   @id
-  firstName   String
-  lastName    String
-  email       String   @unique
-  phoneNumber String
-  leaseStart  DateTime
-  leaseEnd    DateTime
+  id           String   @id
+  firstName    String
+  lastName     String
+  email        String   @unique
+  phoneNumber  String
+  termInMonths Int      @default(1)
+  leaseStart   DateTime
+  leaseEnd     DateTime
 
   unit   Unit?   @relation(fields: [unitId], references: [id])
   unitId String? @unique

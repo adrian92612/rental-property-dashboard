@@ -3,7 +3,6 @@ import { TenantsPageClient } from "@/app/ui/tenants/tenants-page";
 
 const TenantsPage = async () => {
   const tenants = await getTenants();
-  console.log(tenants);
   return <TenantsPageClient tenants={tenants} />;
 };
 
