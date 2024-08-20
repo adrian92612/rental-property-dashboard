@@ -33,7 +33,7 @@ const links = [
 ];
 export const SideBar = () => {
   return (
-    <div className="w-[250px] flex flex-col gap-2 bg-cyan-900 p-5 font-bold text-gray-200 text-xl">
+    <div className="w-[250px] flex flex-col gap-2 bg-cyan-900 p-5 text-gray-200 text-lg font-poppins">
       {links.map((link) => (
         <Link key={link.href} href={link.href} className={linkClass}>
           {link.icon} {link.label}

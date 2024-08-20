@@ -13,7 +13,7 @@ export const PropertyCard = ({ property }: Props) => {
     <div className="flex border-t-4 p-2 mt-2 text-sm">
       <div className="w-[300px] h-[200px] flex justify-center items-center">Image Container</div>
       <div className="flex flex-col">
-        <h2 className="font-bold text-2xl ">{name}</h2>
+        <h2 className="font-poppins font-normal text-xl ">{name}</h2>
         <p className="flex items-center gap-2 ">
           <FaLocationDot /> {address}
         </p>

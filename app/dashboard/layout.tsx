@@ -12,7 +12,7 @@ const DashboardLayout = async ({ children }: Props) => {
     <main className="h-full flex ">
       <SideBar />
       <Suspense fallback={<Loading />}>
-        <section className="grow ">{children}</section>
+        <section className="grow font-lato">{children}</section>
       </Suspense>
     </main>
   );
