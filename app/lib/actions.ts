@@ -281,6 +281,7 @@ export const deleteProperty = async (propertyId: string) => {
       await prisma.property.delete({ where: { id: propertyId } });
     });
 
+    revalidatePath("/dashboard/properties");
     return {
       success: true,
       message: `Property ${propertyId} and associated units deleted successfully.`,
