@@ -1,6 +1,5 @@
 "use client";
 
-import { AddPropertyForm } from "./add-property-form";
 import { useState } from "react";
 import { PropertyCard } from "./property-card";
 import { PropertyWithUnits } from "@/app/lib/actions";
@@ -18,7 +17,7 @@ export const PropertiesPageClient = ({ properties }: Props) => {
   const toggleForm = () => setShowForm(!showForm);
   return (
     <div className="h-full flex">
-      <div className="grow border overflow-y-auto p-5">
+      <div className="grow border overflow-y-auto p-5 scrollbar-thin">
         <h1 className="font-poppins text-5xl text-center mb-5 font-bold">PROPERTIES</h1>
         <button
           onClick={toggleForm}

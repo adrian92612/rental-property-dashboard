@@ -21,8 +21,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} ${lato.variable}`}>
-      <body className="bg-gray-100 font-lato text-gray-800">{children}</body>
+    <html
+      lang="en"
+      className={`${poppins.variable} ${lato.variable} scrollbar-thumb-cyan-700 scrollbar-track-transparent scrollbar-thumb-rounded-md`}
+    >
+      <body className="bg-gray-100 font-lato text-gray-800 ">{children}</body>
     </html>
   );
 }
