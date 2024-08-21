@@ -18,7 +18,7 @@ export const PropertiesPageClient = ({ properties }: Props) => {
   return (
     <div className="h-full flex">
       <div className="grow border overflow-y-auto p-5 scrollbar-thin">
-        <h1 className="font-poppins text-5xl text-center mb-5 font-bold">PROPERTIES</h1>
+        <h1 className="font-poppins text-2xl text-center mb-5 font-bold">PROPERTIES</h1>
         <button
           onClick={toggleForm}
           className=" text-rose-400 border-rose-400 border flex items-center gap-1 px-1 rounded-md hover:text-rose-500 hover:border-rose-500"

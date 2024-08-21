@@ -2,9 +2,7 @@
 
 import { upsertProperty } from "@/app/lib/actions";
 import { Property } from "@prisma/client";
-import Link from "next/link";
 import { useActionState } from "react";
-import { IoIosCheckmarkCircle } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { FormButtons } from "../form-buttons";
 

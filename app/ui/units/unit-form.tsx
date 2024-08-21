@@ -1,10 +1,8 @@
 "use client";
 
 import { PropertyWithUnits, UnitWithTenant, upsertUnit } from "@/app/lib/actions";
-import { Property, Tenant, Unit } from "@prisma/client";
-import Link from "next/link";
+import { Tenant } from "@prisma/client";
 import { useActionState } from "react";
-import { IoIosCheckmarkCircle } from "react-icons/io";
 import { FormButtons } from "../form-buttons";
 import { useRouter } from "next/navigation";
 
