@@ -5,10 +5,14 @@ import prisma from "./prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
 import { Property, Tenant, Unit, User } from "@prisma/client";
-import { error } from "console";
+import { redirect } from "next/navigation";
 
 export interface PropertyWithUnits extends Property {
   units: Unit[];
+}
+
+export interface PropertyWithUnitsAndTenants extends Property {
+  units: UnitWithTenant[];
 }
 
 export interface UnitWithTenant extends Unit {
@@ -55,12 +59,17 @@ export const getPropertiesWithUnits = async () => {
 
 export const getProperty = async (
   propertyId: string,
-  withUnits: boolean = true
-): Promise<Property | PropertyWithUnits> => {
+  withUnits: boolean = true,
+  withTenant: boolean = true
+): Promise<Property | PropertyWithUnits | PropertyWithUnitsAndTenants> => {
   if (withUnits) {
     return (await prisma.property.findUnique({
       where: { id: propertyId },
-      include: { units: true },
+      include: {
+        units: {
+          include: withTenant ? { tenant: true } : null,
+        },
+      },
     })) as PropertyWithUnits;
   }
   return (await prisma.property.findUnique({ where: { id: propertyId } })) as Property;

@@ -4,8 +4,7 @@ import { useActionState, useEffect, useState } from "react";
 import { upsertTenant } from "@/app/lib/actions";
 import { Tenant } from "@prisma/client";
 import Link from "next/link";
-
-const formatDate = (date: Date) => date.toISOString().split("T")[0];
+import { formatDate } from "@/app/lib/helpers";
 
 interface Props {
   tenant: Tenant | null;

@@ -5,6 +5,7 @@ import { Property } from "@prisma/client";
 import Link from "next/link";
 import { useActionState } from "react";
 import { IoIosCheckmarkCircle } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 interface Props {
   property: Property | null;
@@ -22,25 +23,14 @@ export const PropertyForm = ({ property }: Props) => {
       address: property.address,
     }),
   });
-
-  console.log(state.success);
+  const router = useRouter();
 
   if (state.updateSuccess) {
-    return (
-      <div>
-        <h2>{state.updateSuccess}</h2>
-        <Link
-          href={`/dashboard/properties/${property?.id}`}
-          className="text-rose-400 hover:text-rose-500 hover:font-bold"
-        >
-          Go back
-        </Link>
-      </div>
-    );
+    router.push(`/dashboard/properties/${property?.id}`);
   }
 
   return (
-    <form action={action} className="flex flex-col">
+    <form action={action} className="flex flex-col" inert={state.updateSuccess}>
       {property && <input type="hidden" name="propertyId" value={property.id}></input>}
 
       <label htmlFor="name" className={labelClass}>
@@ -105,6 +95,7 @@ export const PropertyForm = ({ property }: Props) => {
 
       {state.error && <span className="text-red-700">{state.error}</span>}
       {state.success && <span className="text-green-700">{state.success}</span>}
+      {state.updateSuccess && <span className="text-green-700">{state.updateSuccess}</span>}
     </form>
   );
 };

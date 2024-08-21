@@ -38,10 +38,11 @@ export const DeleteEditBtn = ({ id, model }: Props) => {
     },
   };
 
+  const { fn, route } = deleteAction[model];
+
   const handleDelete = async () => {
     try {
       setIsPending(true);
-      const { fn, route } = deleteAction[model];
       const res = await fn();
       if (res.success) return router.push(`/dashboard/${route}`);
       setError(res.message);
@@ -65,7 +66,7 @@ export const DeleteEditBtn = ({ id, model }: Props) => {
             Delete
           </button>
           <Link
-            href={`/dashboard/properties/${id}/edit`}
+            href={`/dashboard/${route}/${id}/edit`}
             className="flex items-center italic hover:text-rose-400"
           >
             <FaEdit />

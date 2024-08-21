@@ -1,6 +1,5 @@
 import { getUnit } from "@/app/lib/actions";
-import { DeleteBtn } from "@/app/ui/delete-button";
-import Link from "next/link";
+import { DeleteEditBtn } from "@/app/ui/delete-edit-button";
 import { redirect } from "next/navigation";
 
 const UnitDetailsPage = async ({ params }: { params: { id: string } }) => {
@@ -11,10 +10,7 @@ const UnitDetailsPage = async ({ params }: { params: { id: string } }) => {
     <div>
       <h1>Unit Details</h1>
       <p>{JSON.stringify(unit)}</p>
-      <div>
-        <DeleteBtn id={unit.id} model="unit" />
-        <Link href={`/dashboard/units/${unit.id}/edit`}>Edit</Link>
-      </div>
+      <DeleteEditBtn id={unit.id} model="unit" />
     </div>
   );
 };
