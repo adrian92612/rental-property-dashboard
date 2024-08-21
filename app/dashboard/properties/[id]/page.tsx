@@ -1,14 +1,13 @@
 import {
-  getProperty,
   getUser,
   PropertyWithUnits,
   PropertyWithUnitsAndTenants,
 } from "@/app/lib/actions";
+import { getProperty } from "@/app/lib/actions-properties";
 import { formatDate } from "@/app/lib/helpers";
 import { DeleteEditBtn } from "@/app/ui/delete-edit-button";
 import { redirect } from "next/navigation";
 import { FaLocationDot } from "react-icons/fa6";
-import { Lia500Px } from "react-icons/lia";
 
 const PropertyDetailsPage = async ({ params }: { params: { id: string } }) => {
   const [user, property] = await Promise.all([
@@ -55,7 +54,9 @@ const PropertyDetailsPage = async ({ params }: { params: { id: string } }) => {
           <ul className="flex flex-wrap gap-2">
             {units.map((unit) => {
               const tenant = unit.tenant;
-              const start = tenant?.leaseStart ? formatDate(tenant.leaseStart) : "";
+              const start = tenant?.leaseStart
+                ? formatDate(tenant.leaseStart)
+                : "";
               const end = tenant?.leaseEnd ? formatDate(tenant.leaseEnd) : "";
               return (
                 <li
@@ -66,7 +67,9 @@ const PropertyDetailsPage = async ({ params }: { params: { id: string } }) => {
                   <p>Rent: ${unit.rentAmount}</p>
                   <p>Due Date: {unit.dueDate}</p>
                   <p>Status: {tenant ? "Occupied" : "Vacant"}</p>
-                  <p>Tenant: {tenant && `${tenant.firstName} ${tenant.lastName}`}</p>
+                  <p>
+                    Tenant: {tenant && `${tenant.firstName} ${tenant.lastName}`}
+                  </p>
                   <p>Lease Start: {start}</p>
                   <p>Lease End: {end}</p>
                 </li>

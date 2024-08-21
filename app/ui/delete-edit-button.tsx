@@ -1,11 +1,12 @@
 "use client";
 
-import { deleteProperty, deleteTenant, deleteUnit } from "@/app/lib/actions";
+import { deleteTenant, deleteUnit } from "@/app/lib/actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { deleteProperty } from "../lib/actions-properties";
 
 interface Props {
   id: string;
@@ -80,7 +81,10 @@ export const DeleteEditBtn = ({ id, model }: Props) => {
             <button onClick={handleDelete} className="hover:text-rose-400">
               {isPending ? "Deleting..." : "Yes"}
             </button>
-            <button onClick={handleToggleDelete} className="hover:text-rose-400">
+            <button
+              onClick={handleToggleDelete}
+              className="hover:text-rose-400"
+            >
               Cancel
             </button>
           </div>

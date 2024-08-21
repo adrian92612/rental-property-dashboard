@@ -1,19 +1,15 @@
 "use client";
 
-import { upsertProperty } from "@/app/lib/actions";
 import { Property } from "@prisma/client";
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { FormButtons } from "../form-buttons";
+import { upsertProperty } from "@/app/lib/actions-properties";
+import { Input, Label } from "../form-elements";
 
 interface Props {
   property: Property | null;
 }
-
-const inputClass =
-  "mb-2 px-3 py-1 rounded bg-transparent border border-cyan-900 focus:ring-cyan-700 focus:ring focus:outline-none";
-
-const labelClass = "font-poppins text-lg";
 
 export const PropertyForm = ({ property }: Props) => {
   const [state, action, isPending] = useActionState(upsertProperty, {
@@ -30,55 +26,61 @@ export const PropertyForm = ({ property }: Props) => {
   }
 
   return (
-    <form action={action} className="flex flex-col" inert={state.updateSuccess}>
-      {property && <input type="hidden" name="propertyId" value={property.id}></input>}
+    <form
+      action={action}
+      className="flex flex-col"
+      inert={state.updateSuccess || isPending}
+    >
+      {property && (
+        <input type="hidden" name="propertyId" value={property.id}></input>
+      )}
 
-      <label htmlFor="name" className={labelClass}>
-        Name
-      </label>
-      <input
+      <Label htmlFor="name">Name</Label>
+      <Input
         type="text"
         name="name"
         id="name"
         placeholder="Prima Building"
+        disabled={state.updateSuccess || isPending}
         defaultValue={state.name}
-        className={inputClass}
       />
 
-      <label htmlFor="address" className={labelClass}>
-        Address
-      </label>
-      <input
+      <Label htmlFor="address">Address</Label>
+      <Input
         type="text"
         name="address"
         id="address"
         placeholder="123 some street some place, some city"
+        disabled={state.updateSuccess || isPending}
         defaultValue={state.address}
-        className={inputClass}
       />
 
       {!property && (
         <>
-          <label htmlFor="units" className={labelClass}>
-            Number of Unit/s
-          </label>
-          <input
+          <Label htmlFor="units">Number of Unit/s</Label>
+          <Input
             type="number"
             name="units"
             id="units"
             min={1}
             step={1}
             defaultValue={state.units ?? 1}
-            className={inputClass}
+            disabled={state.updateSuccess || isPending}
           />
         </>
       )}
 
-      <FormButtons isPending={isPending} isEditMode={!!property} cancelUrl={propertyUrl} />
+      <FormButtons
+        isPending={isPending}
+        isEditMode={!!property}
+        cancelUrl={propertyUrl}
+      />
 
       {state.error && <span className="text-red-700">{state.error}</span>}
       {state.success && <span className="text-green-700">{state.success}</span>}
-      {state.updateSuccess && <span className="text-green-700">{state.updateSuccess}</span>}
+      {state.updateSuccess && (
+        <span className="text-green-700">{state.updateSuccess}</span>
+      )}
     </form>
   );
 };

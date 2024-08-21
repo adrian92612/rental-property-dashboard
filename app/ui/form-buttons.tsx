@@ -16,7 +16,13 @@ export const FormButtons = ({ isPending, isEditMode, cancelUrl }: Props) => {
         className="flex items-center gap-1 hover:text-rose-500 hover:font-bold"
       >
         <IoIosCheckmarkCircle />
-        {isPending ? (isEditMode ? "Updating..." : "Adding...") : isEditMode ? "Update" : "Add"}
+        {isPending
+          ? isEditMode
+            ? "Updating..."
+            : "Adding..."
+          : isEditMode
+          ? "Update"
+          : "Add"}
       </button>
       {isEditMode && (
         <Link href={cancelUrl} className="hover:text-rose-500 hover:font-bold">
