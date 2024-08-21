@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import { FormButtons } from "../form-buttons";
 
 interface Props {
   property: Property | null;
@@ -24,9 +25,10 @@ export const PropertyForm = ({ property }: Props) => {
     }),
   });
   const router = useRouter();
+  const propertyUrl = `/dashboard/properties/${property?.id}`;
 
   if (state.updateSuccess) {
-    router.push(`/dashboard/properties/${property?.id}`);
+    router.push(propertyUrl);
   }
 
   return (
@@ -74,24 +76,7 @@ export const PropertyForm = ({ property }: Props) => {
         </>
       )}
 
-      <div className="flex gap-2 text-rose-400">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="flex items-center gap-1 hover:text-rose-500 hover:font-bold"
-        >
-          <IoIosCheckmarkCircle />
-          {isPending ? (property ? "Updating..." : "Adding...") : property ? "Update" : "Add"}
-        </button>
-        {property && (
-          <Link
-            href={`/dashboard/properties/${property.id}`}
-            className="hover:text-rose-500 hover:font-bold"
-          >
-            Cancel
-          </Link>
-        )}
-      </div>
+      <FormButtons isPending={isPending} isEditMode={!!property} cancelUrl={propertyUrl} />
 
       {state.error && <span className="text-red-700">{state.error}</span>}
       {state.success && <span className="text-green-700">{state.success}</span>}

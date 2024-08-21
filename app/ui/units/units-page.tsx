@@ -4,6 +4,7 @@ import { Property, Unit } from "@prisma/client";
 import { useState } from "react";
 import { AddUnitForm } from "./add-unit-form";
 import Link from "next/link";
+import { UnitForm } from "./unit-form";
 
 interface PropertyWithUnits extends Property {
   units: Unit[];
@@ -36,7 +37,8 @@ export const UnitsPageClient = ({ properties }: Props) => {
       {showForm && (
         <div className="w-[400px] p-6">
           <button onClick={toggleForm}>Close</button>
-          <AddUnitForm properties={properties} />
+          {/* <AddUnitForm properties={properties} /> */}
+          <UnitForm properties={properties} unit={null} tenants={null} />
         </div>
       )}
     </div>

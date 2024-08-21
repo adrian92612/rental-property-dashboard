@@ -160,8 +160,8 @@ export const upsertUnit = async (prevState: any, formData: FormData) => {
     tenantId,
   };
 
-  if (!propertyId) return { ...currentState, error: "Property Id not found", success: "" };
-  if (!number) return { ...currentState, error: "Unit Number not found", success: "" };
+  if (!propertyId) return { ...currentState, error: "Property Id not found" };
+  if (!number) return { ...currentState, error: "Unit Number not found" };
 
   try {
     const property = await prisma.property.findUnique({
@@ -169,7 +169,7 @@ export const upsertUnit = async (prevState: any, formData: FormData) => {
       select: { name: true },
     });
 
-    if (!property) return { ...currentState, error: "Property not found.", success: "" };
+    if (!property) return { ...currentState, error: "Property not found." };
 
     await prisma.unit.upsert({
       where: { id: unitId ?? "" },
@@ -195,7 +195,7 @@ export const upsertUnit = async (prevState: any, formData: FormData) => {
     });
 
     if (unitId) {
-      return { ...currentState, error: "", success: `${number} was successfully updated.` };
+      return { ...currentState, updateSuccess: `${number} was successfully updated.` };
     }
 
     revalidatePath("/dashboard/units");
