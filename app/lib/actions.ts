@@ -4,7 +4,7 @@ import { auth, signIn, signOut } from "@/auth";
 import prisma from "./prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
-import { Property, Tenant, Unit } from "@prisma/client";
+import { Property, Tenant, Unit, User } from "@prisma/client";
 import { error } from "console";
 
 export interface PropertyWithUnits extends Property {
@@ -26,6 +26,11 @@ export const login = async (formData: FormData) => {
 
 export const logout = async () => {
   await signOut({ redirectTo: "/" });
+};
+
+export const getUser = async () => {
+  const id = await getUserId();
+  return prisma.user.findUnique({ where: { id: id } });
 };
 
 export const getUserId = async () => {

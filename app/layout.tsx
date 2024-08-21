@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${lato.variable} scrollbar-thumb-cyan-700 scrollbar-track-transparent scrollbar-thumb-rounded-md`}
+      className={`${poppins.variable} ${lato.variable} scrollbar-thumb-cyan-700 scrollbar-track-transparent`}
     >
       <body className="bg-gray-100 font-lato text-gray-800 ">{children}</body>
     </html>

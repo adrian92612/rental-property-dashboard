@@ -3,7 +3,10 @@ import { PropertiesPageClient } from "@/app/ui/properties/properties-page";
 
 const PropertiesPage = async () => {
   const properties = await getPropertiesWithUnits();
-  return <PropertiesPageClient properties={properties} />;
+  const sortedProperties = properties.sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
+  );
+  return <PropertiesPageClient properties={sortedProperties} />;
 };
 
 export default PropertiesPage;
