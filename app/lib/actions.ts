@@ -72,22 +72,32 @@ export const getProperty = async (
       },
     })) as PropertyWithUnits;
   }
-  return (await prisma.property.findUnique({ where: { id: propertyId } })) as Property;
+  return (await prisma.property.findUnique({
+    where: { id: propertyId },
+  })) as Property;
 };
 
 export const getUnits = async (propertyId: string) => {
-  const units = await prisma.unit.findMany({ where: { propertyId: propertyId } });
+  const units = await prisma.unit.findMany({
+    where: { propertyId: propertyId },
+  });
   return units;
 };
 
 export const getUnit = async (unitId: string) => {
-  return await prisma.unit.findUnique({ where: { id: unitId }, include: { tenant: true } });
+  return await prisma.unit.findUnique({
+    where: { id: unitId },
+    include: { tenant: true },
+  });
 };
 
 export const getTenants = async () => await prisma.tenant.findMany();
 
 export const getTenant = async (tenantId: string) =>
-  await prisma.tenant.findUnique({ where: { id: tenantId }, include: { unit: true } });
+  await prisma.tenant.findUnique({
+    where: { id: tenantId },
+    include: { unit: true },
+  });
 
 export const upsertProperty = async (prevState: any, formData: FormData) => {
   try {
@@ -104,8 +114,10 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     };
 
     if (!name) return { ...prevState, error: "Property name is required" };
-    if (!address) return { ...prevState, error: "Property address is required" };
-    if (!propertyId && !units) return { ...prevState, error: "Minimum of 1 unit is required" };
+    if (!address)
+      return { ...prevState, error: "Property address is required" };
+    if (!propertyId && !units)
+      return { ...prevState, error: "Minimum of 1 unit is required" };
 
     const property = await prisma.property.upsert({
       where: { id: propertyId ?? "" },
@@ -124,7 +136,9 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     });
 
     if (propertyId) {
-      return { updateSuccess: `${property.name} has been successfully updated` };
+      return {
+        updateSuccess: `${property.name} has been successfully updated`,
+      };
     }
 
     const unitData = Array.from({ length: units }, (_, i) => ({
@@ -137,10 +151,17 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     await prisma.unit.createMany({ data: unitData });
 
     revalidatePath("/dashboard/properties");
-    return { success: `${name} with ${units} units created successfully.`, error: "" };
+    return {
+      success: `${name} with ${units} units created successfully.`,
+      error: "",
+    };
   } catch (error) {
     console.log(error);
-    return { ...prevState, error: "Failed to create/update property and unit/s.", success: "" };
+    return {
+      ...prevState,
+      error: "Failed to create/update property and unit/s.",
+      success: "",
+    };
   }
 };
 
@@ -158,6 +179,7 @@ export const upsertUnit = async (prevState: any, formData: FormData) => {
     rentAmount,
     dueDate,
     tenantId,
+    propertyId,
   };
 
   if (!propertyId) return { ...currentState, error: "Property Id not found" };
@@ -195,7 +217,10 @@ export const upsertUnit = async (prevState: any, formData: FormData) => {
     });
 
     if (unitId) {
-      return { ...currentState, updateSuccess: `${number} was successfully updated.` };
+      return {
+        ...currentState,
+        updateSuccess: `${number} was successfully updated.`,
+      };
     }
 
     revalidatePath("/dashboard/units");
@@ -236,9 +261,12 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
   if (!firstName) return { ...currentState, error: "First name is required" };
   if (!lastName) return { ...currentState, error: "Last name is required" };
   if (!email) return { ...currentState, error: "Email is required" };
-  if (!phoneNumber) return { ...currentState, error: "Phone number is required" };
-  if (!leaseStartValue) return { ...currentState, error: "Lease start date is required" };
-  if (!leaseEndValue) return { ...currentState, error: "Lease end date is required" };
+  if (!phoneNumber)
+    return { ...currentState, error: "Phone number is required" };
+  if (!leaseStartValue)
+    return { ...currentState, error: "Lease start date is required" };
+  if (!leaseEndValue)
+    return { ...currentState, error: "Lease end date is required" };
 
   try {
     const existingTenant = await prisma.tenant.findUnique({
@@ -246,7 +274,10 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
     });
 
     if (existingTenant && existingTenant.id !== tenantId) {
-      return { ...currentState, error: "A tenant with this email already exists." };
+      return {
+        ...currentState,
+        error: "A tenant with this email already exists.",
+      };
     }
 
     await prisma.tenant.upsert({
@@ -280,12 +311,14 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
     if (tenantId) {
       return {
         updateSuccess: `${firstName} ${lastName} has been successfully updated.`,
-        error: "",
       };
     }
 
     revalidatePath("/dashboard/tenants");
-    return { success: `${firstName} ${lastName} has been added to Tenants`, error: "" };
+    return {
+      success: `${firstName} ${lastName} has been added to Tenants`,
+      error: "",
+    };
   } catch (error) {
     const msg = `Failed to ${tenantId ? "update" : "add"} tenant`;
     console.log(msg, error);
@@ -310,7 +343,11 @@ export const deleteProperty = async (propertyId: string) => {
     };
   } catch (error) {
     console.error("Failed to delete property: ", error);
-    return { success: false, message: `Failed to delete property ${propertyId}.`, error };
+    return {
+      success: false,
+      message: `Failed to delete property ${propertyId}.`,
+      error,
+    };
   }
 };
 
@@ -323,7 +360,11 @@ export const deleteUnit = async (unitId: string) => {
     };
   } catch (error) {
     console.error("Failed to delete unit: ", error);
-    return { success: false, message: `Failed to delete unit ${unitId}.`, error };
+    return {
+      success: false,
+      message: `Failed to delete unit ${unitId}.`,
+      error,
+    };
   }
 };
 
@@ -336,6 +377,10 @@ export const deleteTenant = async (tenantId: string) => {
     };
   } catch (error) {
     console.error("Failed to delete tenant: ", error);
-    return { success: false, message: `Failed to delete tenant ${tenantId}.`, error };
+    return {
+      success: false,
+      message: `Failed to delete tenant ${tenantId}.`,
+      error,
+    };
   }
 };

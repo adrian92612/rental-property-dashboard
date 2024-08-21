@@ -14,7 +14,7 @@ type LabelProps = LabelHTMLAttributes<HTMLLabelElement> & {
 };
 
 export const Label = ({ htmlFor, children }: LabelProps) => (
-  <label htmlFor={htmlFor} className="font-poppins text-lg">
+  <label htmlFor={htmlFor} className="label-custom">
     {children}
   </label>
 );

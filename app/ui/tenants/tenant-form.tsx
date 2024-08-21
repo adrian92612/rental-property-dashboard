@@ -5,15 +5,16 @@ import { upsertTenant } from "@/app/lib/actions";
 import { Tenant } from "@prisma/client";
 import Link from "next/link";
 import { formatDate } from "@/app/lib/helpers";
+import { Input, Label } from "../form-elements";
+import { FormButtons } from "../form-buttons";
+import { useRouter } from "next/navigation";
 
-interface Props {
-  tenant: Tenant | null;
-}
+type TenantFormProps = { tenant: Tenant | null };
 
-export const TenantForm = ({ tenant = null }: Props) => {
+export const TenantForm = ({ tenant = null }: TenantFormProps) => {
   const [state, action, isPending] = useActionState(upsertTenant, {
     ...(tenant && {
-      id: tenant.id,
+      tenantId: tenant.id,
       firstName: tenant.firstName,
       lastName: tenant.lastName,
       email: tenant.email,
@@ -28,17 +29,16 @@ export const TenantForm = ({ tenant = null }: Props) => {
   const [term, setTerm] = useState(tenant ? state.termInMonths : 1);
   const [termStart, setTermStart] = useState(tenant ? state.leaseStart : "");
   const [termEnd, setTermEnd] = useState(tenant ? state.leaseEnd : "");
+  const router = useRouter();
 
   useEffect(() => {
-    console.log(state.success);
     if (state.success) {
-      console.log("use effect");
       setTerm(1);
       setTermStart("");
       setTermEnd("");
       state.success = "";
     }
-  });
+  }, [state]);
 
   const calculateTerm = (term: number, start: string) => {
     if (!term || !start) {
@@ -70,34 +70,46 @@ export const TenantForm = ({ tenant = null }: Props) => {
     calculateTerm(term, newTermStart);
   };
 
+  const tenantUrl = `/dashboard/tenants/${tenant?.id}`;
+
   if (tenant && state.updateSuccess) {
-    return (
-      <div>
-        <p>{state.updateSuccess}</p>
-        <Link href={`/dashboard/tenants/${tenant.id}`}>Go Back</Link>
-      </div>
-    );
+    router.push(tenantUrl);
   }
 
   return (
-    <form action={action} className="flex flex-col">
+    <form action={action} className="flex flex-col" inert={state.updateSuccess}>
       <input type="hidden" name="tenantId" defaultValue={state.id} />
       <input type="hidden" name="unitId" defaultValue={state.unitId} />
 
-      <label htmlFor="firstName">First Name</label>
-      <input type="text" name="firstName" id="firstName" defaultValue={state.firstName} />
+      <Label htmlFor="firstName">First Name</Label>
+      <Input
+        type="text"
+        name="firstName"
+        id="firstName"
+        defaultValue={state.firstName}
+      />
 
-      <label htmlFor="lastName">Last Name</label>
-      <input type="text" name="lastName" id="lastName" defaultValue={state.lastName} />
+      <Label htmlFor="lastName">Last Name</Label>
+      <Input
+        type="text"
+        name="lastName"
+        id="lastName"
+        defaultValue={state.lastName}
+      />
 
-      <label htmlFor="email">Email</label>
-      <input type="email" name="email" id="email" defaultValue={state.email} />
+      <Label htmlFor="email">Email</Label>
+      <Input type="email" name="email" id="email" defaultValue={state.email} />
 
-      <label htmlFor="phoneNumber">Phone Number</label>
-      <input type="tel" name="phoneNumber" id="phoneNumber" defaultValue={state.phoneNumber} />
+      <Label htmlFor="phoneNumber">Phone Number</Label>
+      <Input
+        type="tel"
+        name="phoneNumber"
+        id="phoneNumber"
+        defaultValue={state.phoneNumber}
+      />
 
-      <label htmlFor="termInMonths">Term in months</label>
-      <input
+      <Label htmlFor="termInMonths">Term in months</Label>
+      <Input
         type="number"
         name="termInMonths"
         id="termInMonths"
@@ -107,8 +119,8 @@ export const TenantForm = ({ tenant = null }: Props) => {
         onChange={handleTermChange}
       />
 
-      <label htmlFor="leaseStart">Lease Start</label>
-      <input
+      <Label htmlFor="leaseStart">Lease Start</Label>
+      <Input
         type="date"
         name="leaseStart"
         id="leaseStart"
@@ -117,21 +129,26 @@ export const TenantForm = ({ tenant = null }: Props) => {
         onChange={handleStartDateChange}
       />
 
-      <label htmlFor="leaseEnd">Lease End</label>
-      <input type="date" name="leaseEnd" id="leaseEnd" readOnly value={termEnd} />
+      <Label htmlFor="leaseEnd">Lease End</Label>
+      <Input
+        type="date"
+        name="leaseEnd"
+        id="leaseEnd"
+        readOnly
+        value={termEnd}
+      />
 
-      <button type="submit">
-        {isPending
-          ? tenant
-            ? "Updating..."
-            : "Adding..."
-          : tenant
-          ? "Update Tenant"
-          : "Add Tenant"}
-      </button>
+      <FormButtons
+        isPending={isPending}
+        isEditMode={!!tenant}
+        cancelUrl={tenantUrl}
+      />
 
       {state.error && <span className="text-red-400">{state.error}</span>}
       {state.success && <span className="text-green-400">{state.success}</span>}
+      {state.updateSuccess && (
+        <span className="text-green-700">{state.updateSuccess}</span>
+      )}
     </form>
   );
 };

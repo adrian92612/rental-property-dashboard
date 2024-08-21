@@ -1,10 +1,15 @@
 "use client";
 
-import { PropertyWithUnits, UnitWithTenant, upsertUnit } from "@/app/lib/actions";
+import {
+  PropertyWithUnits,
+  UnitWithTenant,
+  upsertUnit,
+} from "@/app/lib/actions";
 import { Tenant } from "@prisma/client";
 import { useActionState } from "react";
 import { FormButtons } from "../form-buttons";
 import { useRouter } from "next/navigation";
+import { Label, Input } from "../form-elements";
 
 interface Props {
   properties: PropertyWithUnits[] | null;
@@ -33,13 +38,26 @@ export const UnitForm = ({ properties, unit, tenants }: Props) => {
   console.log(state);
   return (
     <form action={action} className="flex flex-col" inert={state.updateSuccess}>
-      <input type="hidden" name="unitId" defaultValue={unit?.id} />
-      <input type="hidden" name="propertyId" defaultValue={unit?.propertyId} />
+      {unit && (
+        <>
+          <input type="hidden" name="unitId" defaultValue={unit?.id} />
+          <input
+            type="hidden"
+            name="propertyId"
+            defaultValue={unit?.propertyId}
+          />
+        </>
+      )}
 
       {properties && (
         <>
-          <label htmlFor="propertyId">Property</label>
-          <select name="propertyId" id="propertyId" defaultValue={state.propertyId ?? ""}>
+          <Label htmlFor="propertyId">Property</Label>
+          <select
+            name="propertyId"
+            id="propertyId"
+            defaultValue={state.propertyId ?? ""}
+            className="input-custom"
+          >
             <option value="" disabled>
               -- Select a Property --
             </option>
@@ -52,11 +70,16 @@ export const UnitForm = ({ properties, unit, tenants }: Props) => {
         </>
       )}
 
-      <label htmlFor="number">Unit No.</label>
-      <input type="text" name="number" id="number" defaultValue={state.number} />
+      <Label htmlFor="number">Unit No.</Label>
+      <Input
+        type="text"
+        name="number"
+        id="number"
+        defaultValue={state.number}
+      />
 
-      <label htmlFor="rentAmount">Monthly Rent</label>
-      <input
+      <Label htmlFor="rentAmount">Monthly Rent</Label>
+      <Input
         type="number"
         name="rentAmount"
         id="rentAmount"
@@ -64,8 +87,14 @@ export const UnitForm = ({ properties, unit, tenants }: Props) => {
         defaultValue={state.rentAmount}
       />
 
-      <label htmlFor="dueDate">Due Date</label>
-      <select name="dueDate" id="dueDate" required defaultValue={state.dueDate}>
+      <Label htmlFor="dueDate">Due Date</Label>
+      <select
+        name="dueDate"
+        id="dueDate"
+        required
+        defaultValue={state.dueDate}
+        className="input-custom"
+      >
         <option value="" disabled>
           -- Select Due Date --
         </option>
@@ -78,8 +107,13 @@ export const UnitForm = ({ properties, unit, tenants }: Props) => {
 
       {tenants && (
         <>
-          <label htmlFor="tenantId">Select a Tenant</label>
-          <select name="tenantId" id="tenantId" defaultValue={state.tenantId}>
+          <Label htmlFor="tenantId">Select a Tenant</Label>
+          <select
+            name="tenantId"
+            id="tenantId"
+            defaultValue={state.tenantId}
+            className="input-custom"
+          >
             <option value="">No Tenant</option>
             {tenants.map((tenant) => (
               <option
@@ -91,11 +125,17 @@ export const UnitForm = ({ properties, unit, tenants }: Props) => {
         </>
       )}
 
-      <FormButtons isPending={isPending} isEditMode={!!unit} cancelUrl={unitUrl} />
+      <FormButtons
+        isPending={isPending}
+        isEditMode={!!unit}
+        cancelUrl={unitUrl}
+      />
 
       {state.error && <span className="text-red-400">{state.error}</span>}
       {state.success && <span className="text-green-400">{state.success}</span>}
-      {state.updateSuccess && <span className="text-green-700">{state.updateSuccess}</span>}
+      {state.updateSuccess && (
+        <span className="text-green-700">{state.updateSuccess}</span>
+      )}
     </form>
   );
 };
