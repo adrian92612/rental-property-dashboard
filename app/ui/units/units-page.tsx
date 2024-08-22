@@ -8,23 +8,17 @@ import { UnitWithPropertyTenantName } from "@/app/lib/actions-units";
 import { UnitCard } from "./unit-card";
 import { ToggleFormButton } from "../toggle-form-button";
 import { IoKey } from "react-icons/io5";
+import { UnitsHeadings } from "./units-heading";
 
-interface UnitsPageClientProps {
+type UnitsPageClientProps = {
   units: UnitWithPropertyTenantName[];
   tenants: Tenant[];
   properties: Property[];
-}
+};
 
-const Headings = () => {
-  return (
-    <div className="flex items-center border-b-2 font-poppins font-bold sticky">
-      <div className="units-cell">Unit No.</div>
-      <div className="units-cell">Property Name</div>
-      <div className="units-cell">Rent Amount</div>
-      <div className="units-cell">Due Date</div>
-      <div className="units-cell">Status</div>
-    </div>
-  );
+export type SortConfig = {
+  key: keyof UnitWithPropertyTenantName | null;
+  direction: "ascending" | "descending";
 };
 
 export const UnitsPageClient = ({
@@ -32,8 +26,46 @@ export const UnitsPageClient = ({
   tenants,
   properties,
 }: UnitsPageClientProps) => {
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [sortConfig, setSortConfig] = useState<SortConfig>({
+    key: null,
+    direction: "ascending",
+  });
   const toggleForm = () => setShowForm(!showForm);
+
+  const sortedUnits = [...units].sort((a, b) => {
+    if (sortConfig.key) {
+      let aValue, bValue;
+      if (sortConfig.key === "property") {
+        aValue = a[sortConfig.key]?.name ?? "";
+        bValue = b[sortConfig.key]?.name ?? "";
+      } else {
+        aValue = a[sortConfig.key] ?? "";
+        bValue = b[sortConfig.key] ?? "";
+      }
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortConfig.direction === "ascending"
+          ? aValue.localeCompare(bValue, undefined, { sensitivity: "base" })
+          : bValue.localeCompare(aValue, undefined, { sensitivity: "base" });
+      }
+
+      return (
+        (aValue < bValue ? -1 : 1) *
+        (sortConfig.direction === "ascending" ? 1 : -1)
+      );
+    }
+    return 0;
+  });
+
+  const requestSort = (key: keyof UnitWithPropertyTenantName) => {
+    let direction: "ascending" | "descending" = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
   return (
     <div className="h-full flex ">
       <div className="grow p-5 flex flex-col overflow-y-auto scrollbar-thin relative">
@@ -41,9 +73,9 @@ export const UnitsPageClient = ({
           Units
         </h2>
         <ToggleFormButton fn={toggleForm} icon={<IoKey />} label="Add Unit" />
-        <Headings />
+        <UnitsHeadings sortConfig={sortConfig} requestSort={requestSort} />
         {units.length &&
-          units.map((unit) => (
+          sortedUnits.map((unit) => (
             <Link key={unit.id} href={`/dashboard/units/${unit.id}`}>
               <UnitCard unit={unit} />
             </Link>

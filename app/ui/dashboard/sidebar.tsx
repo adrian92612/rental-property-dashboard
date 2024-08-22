@@ -31,7 +31,7 @@ const links = [
 ];
 export const SideBar = () => {
   return (
-    <div className="w-[250px] flex flex-col gap-2 bg-cyan-900 p-5 text-gray-200 text-lg font-poppins">
+    <div className="max-w-[250px] h-screen hidden flex-col gap-2 bg-cyan-900 p-5 text-gray-200 text-lg font-poppins  sm:flex">
       {links.map((link) => (
         <Link key={link.href} href={link.href} className={linkClass}>
           {link.icon} {link.label}

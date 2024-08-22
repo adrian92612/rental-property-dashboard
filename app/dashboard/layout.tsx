@@ -9,10 +9,10 @@ interface Props {
 
 const DashboardLayout = async ({ children }: Props) => {
   return (
-    <main className="h-full flex ">
+    <main className="flex h-screen">
       <SideBar />
       <Suspense fallback={<Loading />}>
-        <section className="grow">{children}</section>
+        <section className="grow ">{children}</section>
       </Suspense>
     </main>
   );
