@@ -15,3 +15,7 @@ body,
 .label-custom {
   @apply font-poppins text-lg;
 }
+
+.units-cell {
+  @apply flex-1 p-2 text-left;
+}

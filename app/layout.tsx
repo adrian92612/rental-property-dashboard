@@ -3,7 +3,11 @@ import { Inter, Poppins, Lato } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-const poppins = Poppins({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-poppins" });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  variable: "--font-poppins",
+});
 const lato = Lato({
   subsets: ["latin"],
   weight: ["100", "300", "400", "700"],
@@ -25,7 +29,9 @@ export default function RootLayout({
       lang="en"
       className={`${poppins.variable} ${lato.variable} scrollbar-thumb-cyan-700 scrollbar-track-transparent`}
     >
-      <body className="bg-gray-100 font-lato text-gray-800 ">{children}</body>
+      <body className="bg-gray-100 font-lato text-gray-800 text-sm">
+        {children}
+      </body>
     </html>
   );
 }

@@ -4,6 +4,16 @@ import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
 
 export type UnitWithTenant = Unit & { tenant: Tenant | null };
+export type UnitWithPropertyTenantName = Unit & {
+  property: {
+    name: string;
+  } | null;
+  tenant: {
+    id: string;
+    firstName: string;
+    lastName: string;
+  } | null;
+};
 
 export const getUnit = async (unitId: string): Promise<Unit | null> => {
   try {
@@ -29,6 +39,35 @@ export const getUnitWithTenant = async (
     return unit;
   } catch (error) {
     console.log("Failed to fetch unit: ", error);
+    return null;
+  }
+};
+
+export const getUnitWithPropertyTenantName = async (): Promise<
+  UnitWithPropertyTenantName[] | null
+> => {
+  try {
+    const units = await prisma.unit.findMany({
+      include: {
+        property: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        tenant: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
+    console.log(units);
+    return units;
+  } catch (error) {
+    console.log("Failed to fetch units: ", error);
     return null;
   }
 };

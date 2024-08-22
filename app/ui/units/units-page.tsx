@@ -1,43 +1,57 @@
 "use client";
 
-import { Property, Unit } from "@prisma/client";
+import { Property, Tenant, Unit } from "@prisma/client";
 import { useState } from "react";
 import Link from "next/link";
-import { UnitForm } from "./unit-form";
+import { UnitForm, UnitForm2 } from "./unit-form";
+import { UnitWithPropertyTenantName } from "@/app/lib/actions-units";
+import { UnitCard } from "./unit-card";
 
-interface PropertyWithUnits extends Property {
-  units: Unit[];
+interface UnitsPageClientProps {
+  units: UnitWithPropertyTenantName[];
+  tenants: Tenant[];
+  properties: Property[];
 }
 
-interface Props {
-  properties: PropertyWithUnits[];
-}
+const Headings = () => {
+  return (
+    <div className="flex items-center border-b-2 font-poppins font-bold sticky">
+      <div className="units-cell">Unit No.</div>
+      <div className="units-cell">Property Name</div>
+      <div className="units-cell">Rent Amount</div>
+      <div className="units-cell">Due Date</div>
+      <div className="units-cell">Status</div>
+    </div>
+  );
+};
 
-export const UnitsPageClient = ({ properties }: Props) => {
+export const UnitsPageClient = ({
+  units,
+  tenants,
+  properties,
+}: UnitsPageClientProps) => {
   const [showForm, setShowForm] = useState(false);
   const toggleForm = () => setShowForm(!showForm);
   return (
-    <div className="h-full flex bg-slate-100">
-      <div className="grow border">
-        <h1>Units</h1>
-        <button onClick={toggleForm}>Add a Unit</button>
-        {properties.length ? (
-          properties.map((prop) =>
-            prop.units.map((unit) => (
-              <div key={unit.id}>
-                <Link href={`/dashboard/units/${unit.id}`}>{unit.number}</Link>
-              </div>
-            ))
-          )
-        ) : (
-          <p>No units listed...</p>
-        )}
+    <div className="h-full flex">
+      <div className="grow border flex flex-col overflow-y-auto scrollbar-thin relative">
+        <h2 className="text-center font-poppins font-extrabold text-xl">
+          Units
+        </h2>
+        <button onClick={toggleForm}>Add Unit</button>
+        <Headings />
+        {units.length &&
+          units.map((unit) => (
+            <Link key={unit.id} href={`/dashboard/units/${unit.id}`}>
+              <UnitCard unit={unit} />
+            </Link>
+          ))}
       </div>
       {showForm && (
         <div className="w-[400px] p-6">
           <button onClick={toggleForm}>Close</button>
-          {/* <AddUnitForm properties={properties} /> */}
-          <UnitForm properties={properties} unit={null} tenants={null} />
+          {/* <UnitForm properties={properties} unit={null} tenants={null} /> */}
+          <UnitForm2 properties={properties} />
         </div>
       )}
     </div>

@@ -12,19 +12,30 @@ export type PropertyWithUnitsAndTenant = PropertyWithUnits & {
   tenant: Tenant;
 };
 
-export const getProperties = async (
-  withUnits: boolean = false
-): Promise<Property[] | PropertyWithUnits[]> => {
+export const getProperties = async (): Promise<Property[] | null> => {
+  try {
+    const userId = await getUserId();
+    const properties = prisma.property.findMany({ where: { userId: userId } });
+    return properties;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getPropertiesWithUnits = async (): Promise<
+  PropertyWithUnits[] | null
+> => {
   try {
     const userId = await getUserId();
     const properties = await prisma.property.findMany({
       where: { userId: userId },
-      include: withUnits ? { units: true } : undefined,
+      include: { units: true },
     });
     return properties;
   } catch (error) {
     console.error("Failed to fetch properties:", error);
-    throw new Error("Failed to fetch properties");
+    return null;
   }
 };
 
