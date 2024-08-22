@@ -1,9 +1,12 @@
+"use server";
+
 import { Unit, Tenant } from "@prisma/client";
 import prisma from "./prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
 
 export type UnitWithTenant = Unit & { tenant: Tenant | null };
+
 export type UnitWithPropertyTenantName = Unit & {
   property: {
     name: string;
@@ -57,6 +60,7 @@ export const getUnitWithPropertyTenantName = async (): Promise<
         },
         tenant: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
           },
@@ -64,7 +68,6 @@ export const getUnitWithPropertyTenantName = async (): Promise<
       },
     });
 
-    console.log(units);
     return units;
   } catch (error) {
     console.log("Failed to fetch units: ", error);

@@ -1,9 +1,5 @@
-import {
-  getUser,
-  PropertyWithUnits,
-  PropertyWithUnitsAndTenants,
-} from "@/app/lib/actions";
-import { getProperty } from "@/app/lib/actions-properties";
+import { getUser } from "@/app/lib/actions";
+import { getPropertyWithUnitsAndTenants } from "@/app/lib/actions-properties";
 import { formatDate } from "@/app/lib/helpers";
 import { DeleteEditBtn } from "@/app/ui/delete-edit-button";
 import { redirect } from "next/navigation";
@@ -12,12 +8,12 @@ import { FaLocationDot } from "react-icons/fa6";
 const PropertyDetailsPage = async ({ params }: { params: { id: string } }) => {
   const [user, property] = await Promise.all([
     await getUser(),
-    (await getProperty(params.id)) as PropertyWithUnitsAndTenants,
+    await getPropertyWithUnitsAndTenants(params.id),
   ]);
 
-  const { name, address, units, createdAt, updatedAt } = property;
-
   if (!property || !user) redirect("/dashboard/properties");
+
+  const { name, address, units, createdAt, updatedAt } = property;
 
   return (
     <div className="flex flex-col gap-4 p-4 overflow-y-auto h-full scrollbar-thin">

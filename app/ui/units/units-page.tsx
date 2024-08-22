@@ -1,9 +1,9 @@
 "use client";
 
-import { Property, Tenant, Unit } from "@prisma/client";
+import { Property, Tenant } from "@prisma/client";
 import { useState } from "react";
 import Link from "next/link";
-import { UnitForm, UnitForm2 } from "./unit-form";
+import { UnitForm } from "./unit-form";
 import { UnitWithPropertyTenantName } from "@/app/lib/actions-units";
 import { UnitCard } from "./unit-card";
 
@@ -33,12 +33,14 @@ export const UnitsPageClient = ({
   const [showForm, setShowForm] = useState(false);
   const toggleForm = () => setShowForm(!showForm);
   return (
-    <div className="h-full flex">
-      <div className="grow border flex flex-col overflow-y-auto scrollbar-thin relative">
+    <div className="h-full flex ">
+      <div className="grow p-5 flex flex-col overflow-y-auto scrollbar-thin relative">
         <h2 className="text-center font-poppins font-extrabold text-xl">
           Units
         </h2>
-        <button onClick={toggleForm}>Add Unit</button>
+        <button onClick={toggleForm} className="">
+          Add Unit
+        </button>
         <Headings />
         {units.length &&
           units.map((unit) => (
@@ -51,7 +53,7 @@ export const UnitsPageClient = ({
         <div className="w-[400px] p-6">
           <button onClick={toggleForm}>Close</button>
           {/* <UnitForm properties={properties} unit={null} tenants={null} /> */}
-          <UnitForm2 properties={properties} />
+          <UnitForm properties={properties} tenants={tenants} />
         </div>
       )}
     </div>

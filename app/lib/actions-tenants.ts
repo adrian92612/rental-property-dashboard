@@ -1,3 +1,5 @@
+"use server";
+
 import { Tenant, Unit } from "@prisma/client";
 import prisma from "./prisma";
 import { revalidatePath } from "next/cache";

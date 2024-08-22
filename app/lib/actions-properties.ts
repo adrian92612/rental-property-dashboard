@@ -1,3 +1,5 @@
+"use server";
+
 import { Property, Tenant, Unit } from "@prisma/client";
 import { getUserId } from "./actions";
 import prisma from "./prisma";
@@ -8,8 +10,10 @@ export type PropertyWithUnits = Property & {
   units: Unit[];
 };
 
-export type PropertyWithUnitsAndTenant = PropertyWithUnits & {
-  tenant: Tenant;
+export type PropertyWithUnitsAndTenant = Property & {
+  units: (Unit & {
+    tenant: Tenant | null;
+  })[];
 };
 
 export const getProperties = async (): Promise<Property[] | null> => {
@@ -39,29 +43,25 @@ export const getPropertiesWithUnits = async (): Promise<
   }
 };
 
-export const getProperty = async (
-  propertyId: string,
-  withUnits: boolean = true,
-  withTenant: boolean = true
-): Promise<
-  Property | PropertyWithUnits | PropertyWithUnitsAndTenant | null
-> => {
+export const getPropertyWithUnitsAndTenants = async (
+  propertyId: string
+): Promise<PropertyWithUnitsAndTenant | null> => {
   try {
     const property = await prisma.property.findUnique({
       where: { id: propertyId },
-      include: withUnits
-        ? {
-            units: {
-              include: withTenant ? { tenant: true } : undefined,
-            },
-          }
-        : undefined,
+      include: {
+        units: {
+          include: {
+            tenant: true,
+          },
+        },
+      },
     });
 
     return property;
   } catch (error) {
-    console.error("Failed to fetch property:", error);
-    throw new Error("Failed to fetch property");
+    console.log("Failed to fetch properties: ", error);
+    return null;
   }
 };
 
@@ -155,3 +155,29 @@ export const deleteProperty = async (propertyId: string) => {
     };
   }
 };
+
+// export const getProperty = async (
+//   propertyId: string,
+//   withUnits: boolean = true,
+//   withTenant: boolean = true
+// ): Promise<
+//   Property | PropertyWithUnits | PropertyWithUnitsAndTenant | null
+// > => {
+//   try {
+//     const property = await prisma.property.findUnique({
+//       where: { id: propertyId },
+//       include: withUnits
+//         ? {
+//             units: {
+//               include: withTenant ? { tenant: true } : undefined,
+//             },
+//           }
+//         : undefined,
+//     });
+
+//     return property;
+//   } catch (error) {
+//     console.error("Failed to fetch property:", error);
+//     throw new Error("Failed to fetch property");
+//   }
+// };
