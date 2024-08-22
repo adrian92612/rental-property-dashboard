@@ -1,20 +1,17 @@
 "use client";
 
-import {
-  PropertyWithUnits,
-  UnitWithTenant,
-  upsertUnit,
-} from "@/app/lib/actions";
 import { Tenant } from "@prisma/client";
 import { useActionState } from "react";
 import { FormButtons } from "../form-buttons";
 import { useRouter } from "next/navigation";
 import { Label, Input } from "../form-elements";
+import { UnitWithTenant, upsertUnit } from "@/app/lib/actions-units";
+import { PropertyWithUnits } from "@/app/lib/actions-properties";
 
 interface Props {
   properties: PropertyWithUnits[] | null;
-  unit: UnitWithTenant | null;
-  tenants: Tenant[] | null;
+  unit: UnitWithTenant;
+  tenants: Tenant[];
 }
 
 export const UnitForm = ({ properties, unit, tenants }: Props) => {

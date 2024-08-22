@@ -1,8 +1,8 @@
-import { getPropertiesWithUnits } from "@/app/lib/actions";
+import { getProperties, PropertyWithUnits } from "@/app/lib/actions-properties";
 import { UnitsPageClient } from "@/app/ui/units/units-page";
 
 const UnitsPage = async () => {
-  const properties = await getPropertiesWithUnits();
+  const properties = (await getProperties(true)) as PropertyWithUnits[];
   return <UnitsPageClient properties={properties} />;
 };
 

@@ -7,18 +7,6 @@ import { revalidatePath } from "next/cache";
 import { Property, Tenant, Unit, User } from "@prisma/client";
 import { redirect } from "next/navigation";
 
-export interface PropertyWithUnits extends Property {
-  units: Unit[];
-}
-
-export interface PropertyWithUnitsAndTenants extends Property {
-  units: UnitWithTenant[];
-}
-
-export interface UnitWithTenant extends Unit {
-  tenant: Tenant;
-}
-
 export interface TenantWithUnit extends Tenant {
   unit: Unit;
 }
@@ -42,20 +30,6 @@ export const getUserId = async () => {
   return session?.user?.id as string;
 };
 
-export const getUnits = async (propertyId: string) => {
-  const units = await prisma.unit.findMany({
-    where: { propertyId: propertyId },
-  });
-  return units;
-};
-
-export const getUnit = async (unitId: string) => {
-  return await prisma.unit.findUnique({
-    where: { id: unitId },
-    include: { tenant: true },
-  });
-};
-
 export const getTenants = async () => await prisma.tenant.findMany();
 
 export const getTenant = async (tenantId: string) =>
@@ -63,72 +37,6 @@ export const getTenant = async (tenantId: string) =>
     where: { id: tenantId },
     include: { unit: true },
   });
-
-export const upsertUnit = async (prevState: any, formData: FormData) => {
-  const unitId = formData.get("unitId") as string | undefined;
-  const tenantId = formData.get("tenantId") as string | undefined;
-  const propertyId = formData.get("propertyId") as string;
-  const number = formData.get("number") as string;
-  const rentAmount = parseFloat(formData.get("rentAmount") as string);
-  const dueDate = parseInt(formData.get("dueDate") as string);
-
-  const currentState = {
-    ...prevState,
-    number,
-    rentAmount,
-    dueDate,
-    tenantId,
-    propertyId,
-  };
-
-  if (!propertyId) return { ...currentState, error: "Property Id not found" };
-  if (!number) return { ...currentState, error: "Unit Number not found" };
-
-  try {
-    const property = await prisma.property.findUnique({
-      where: { id: propertyId },
-      select: { name: true },
-    });
-
-    if (!property) return { ...currentState, error: "Property not found." };
-
-    await prisma.unit.upsert({
-      where: { id: unitId ?? "" },
-      update: {
-        number,
-        rentAmount,
-        dueDate,
-        ...(tenantId && {
-          tenant: {
-            connect: { id: tenantId },
-          },
-        }),
-      },
-      create: {
-        id: createId(),
-        number,
-        rentAmount,
-        dueDate,
-        property: {
-          connect: { id: propertyId },
-        },
-      },
-    });
-
-    if (unitId) {
-      return {
-        ...currentState,
-        updateSuccess: `${number} was successfully updated.`,
-      };
-    }
-
-    revalidatePath("/dashboard/units");
-    return { success: `${number} is added to ${property.name}` };
-  } catch (error) {
-    console.log("Failed to add unit: ", error);
-    return { ...currentState, error: "Failed to add unit" };
-  }
-};
 
 export const upsertTenant = async (prevState: any, formData: FormData) => {
   const tenantId = formData.get("tenantId") as string;
@@ -222,23 +130,6 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
     const msg = `Failed to ${tenantId ? "update" : "add"} tenant`;
     console.log(msg, error);
     return { ...currentState, error: msg };
-  }
-};
-
-export const deleteUnit = async (unitId: string) => {
-  try {
-    await prisma.unit.delete({ where: { id: unitId } });
-    return {
-      success: true,
-      message: `Unit ${unitId} deleted successfully.`,
-    };
-  } catch (error) {
-    console.error("Failed to delete unit: ", error);
-    return {
-      success: false,
-      message: `Failed to delete unit ${unitId}.`,
-      error,
-    };
   }
 };
 
