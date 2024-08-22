@@ -1,11 +1,10 @@
-import { getTenant, TenantWithUnit } from "@/app/lib/actions";
+import { getTenantWithUnit } from "@/app/lib/actions-tenants";
 import { EditFormWrapper } from "@/app/ui/form-wrapper";
 import { TenantForm } from "@/app/ui/tenants/tenant-form";
 import { redirect } from "next/navigation";
 
 const EditTenantPage = async ({ params }: { params: { id: string } }) => {
-  const tenant = (await getTenant(params.id)) as TenantWithUnit;
-  console.log(tenant);
+  const tenant = await getTenantWithUnit(params.id);
 
   if (!tenant) redirect("/dashboard/tenants");
 

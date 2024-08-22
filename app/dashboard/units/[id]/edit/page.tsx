@@ -1,4 +1,4 @@
-import { getTenants } from "@/app/lib/actions";
+import { getTenants } from "@/app/lib/actions-tenants";
 import { getUnitWithTenant } from "@/app/lib/actions-units";
 import { EditFormWrapper } from "@/app/ui/form-wrapper";
 import { UnitForm } from "@/app/ui/units/unit-form";

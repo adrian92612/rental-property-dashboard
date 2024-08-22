@@ -1,6 +1,5 @@
 "use client";
 
-import { deleteTenant } from "@/app/lib/actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,6 +7,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { deleteProperty } from "../lib/actions-properties";
 import { deleteUnit } from "../lib/actions-units";
+import { deleteTenant } from "../lib/actions-tenants";
 
 interface Props {
   id: string;

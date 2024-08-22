@@ -1,15 +1,16 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import { upsertTenant } from "@/app/lib/actions";
 import { Tenant } from "@prisma/client";
-import Link from "next/link";
 import { formatDate } from "@/app/lib/helpers";
 import { Input, Label } from "../form-elements";
 import { FormButtons } from "../form-buttons";
 import { useRouter } from "next/navigation";
+import { upsertTenant } from "@/app/lib/actions-tenants";
 
-type TenantFormProps = { tenant: Tenant | null };
+type TenantFormProps = {
+  tenant: Tenant | null;
+};
 
 export const TenantForm = ({ tenant = null }: TenantFormProps) => {
   const [state, action, isPending] = useActionState(upsertTenant, {
