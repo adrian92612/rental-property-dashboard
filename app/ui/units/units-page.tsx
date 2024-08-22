@@ -6,6 +6,8 @@ import Link from "next/link";
 import { UnitForm } from "./unit-form";
 import { UnitWithPropertyTenantName } from "@/app/lib/actions-units";
 import { UnitCard } from "./unit-card";
+import { ToggleFormButton } from "../toggle-form-button";
+import { IoKey } from "react-icons/io5";
 
 interface UnitsPageClientProps {
   units: UnitWithPropertyTenantName[];
@@ -38,9 +40,7 @@ export const UnitsPageClient = ({
         <h2 className="text-center font-poppins font-extrabold text-xl">
           Units
         </h2>
-        <button onClick={toggleForm} className="">
-          Add Unit
-        </button>
+        <ToggleFormButton fn={toggleForm} icon={<IoKey />} label="Add Unit" />
         <Headings />
         {units.length &&
           units.map((unit) => (
@@ -52,7 +52,6 @@ export const UnitsPageClient = ({
       {showForm && (
         <div className="w-[400px] p-6">
           <button onClick={toggleForm}>Close</button>
-          {/* <UnitForm properties={properties} unit={null} tenants={null} /> */}
           <UnitForm properties={properties} tenants={tenants} />
         </div>
       )}
