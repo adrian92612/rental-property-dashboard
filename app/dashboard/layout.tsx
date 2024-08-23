@@ -9,12 +9,12 @@ interface Props {
 
 const DashboardLayout = async ({ children }: Props) => {
   return (
-    <main className="h-screen sm:flex">
+    <div className="h-screen flex flex-col sm:flex-row">
       <SideBar />
-      <Suspense fallback={<Loading />}>
-        <section className="grow ">{children}</section>
-      </Suspense>
-    </main>
+      <main className="sm:flex-1 overflow-y-auto scrollbar-thin">
+        {children}
+      </main>
+    </div>
   );
 };
 
