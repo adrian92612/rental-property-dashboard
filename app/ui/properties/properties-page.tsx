@@ -7,7 +7,7 @@ import { PropertyForm } from "./property-form";
 import { IoIosCloseCircle } from "react-icons/io";
 import { PropertyWithUnits } from "@/app/lib/actions-properties";
 import { ToggleFormButton } from "../toggle-form-button";
-import { FormModal } from "../show-form";
+import { FormModal } from "../form-modal";
 
 interface Props {
   properties: PropertyWithUnits[];

@@ -11,8 +11,8 @@ export const PropertyCard = ({ property }: Props) => {
   const { id, name, address, createdAt, units } = property;
 
   return (
-    <div className="flex border-b-4 p-2 text-sm">
-      <div className="w-[300px] h-[200px] flex justify-center items-center">
+    <div className="flex flex-col max-w-[400px] border-b-4 p-2 text-sm">
+      <div className="w-[300px] h-[150px] border flex justify-center items-center">
         Image Container
       </div>
       <div className="flex flex-col">

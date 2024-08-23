@@ -11,7 +11,7 @@ const DashboardLayout = async ({ children }: Props) => {
   return (
     <div className="h-screen flex flex-col sm:flex-row">
       <SideBar />
-      <main className="sm:flex-1 overflow-y-auto scrollbar-thin">
+      <main className="sm:flex-1 px-2 overflow-y-auto scrollbar-thin">
         {children}
       </main>
     </div>
