@@ -5,6 +5,7 @@ import { getUserId } from "./actions";
 import prisma from "./prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
+import { profileEnd } from "console";
 
 export type PropertyWithUnits = Property & {
   units: Unit[];
@@ -14,6 +15,20 @@ export type PropertyWithUnitsAndTenant = Property & {
   units: (Unit & {
     tenant: Tenant | null;
   })[];
+};
+
+export const getProperty = async (
+  propertyId: string
+): Promise<Property | null> => {
+  try {
+    const property = await prisma.property.findUnique({
+      where: { id: propertyId },
+    });
+    return property;
+  } catch (error) {
+    console.log("Failed to fetch property: ", error);
+    return null;
+  }
 };
 
 export const getProperties = async (): Promise<Property[] | null> => {

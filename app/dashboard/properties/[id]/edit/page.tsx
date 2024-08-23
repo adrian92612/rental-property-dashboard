@@ -1,10 +1,10 @@
-import { getProperty } from "@/app/lib/actions";
+import { getProperty } from "@/app/lib/actions-properties";
 import { EditFormWrapper } from "@/app/ui/form-wrapper";
 import { PropertyForm } from "@/app/ui/properties/property-form";
 import { redirect } from "next/navigation";
 
 const EditPropertyPage = async ({ params }: { params: { id: string } }) => {
-  const property = await getProperty(params.id, false);
+  const property = await getProperty(params.id);
 
   if (!property) redirect("/dashboard/properties");
 
