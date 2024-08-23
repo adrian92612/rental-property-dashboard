@@ -1,5 +1,5 @@
 import { UnitWithPropertyTenantName } from "@/app/lib/actions-units";
-import { SortConfig } from "./units-page";
+import { SortConfig } from "./unit-list";
 
 type UnitsHeadingsProps = {
   sortConfig: SortConfig;
@@ -26,12 +26,15 @@ export const UnitsHeadings = ({
         Property Name {getSortIndicator("property")}
       </button>
       <button
-        className="units-cell-sm"
+        className="units-cell-sm hidden sm:block"
         onClick={() => requestSort("rentAmount")}
       >
         Rent Amount {getSortIndicator("rentAmount")}
       </button>
-      <button className="units-cell-sm" onClick={() => requestSort("dueDate")}>
+      <button
+        className="units-cell-sm hidden sm:block"
+        onClick={() => requestSort("dueDate")}
+      >
         Due Date {getSortIndicator("dueDate")}
       </button>
       <button className="units-cell-sm" onClick={() => requestSort("tenant")}>

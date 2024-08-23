@@ -22,11 +22,11 @@ export const FormModal = ({ variant, children, label }: FormModalProps) => {
           variant === "mobile"
             ? "flex sm:hidden justify-center"
             : "hidden sm:flex justify-end"
-        } sticky top-0 px-8 py-4 backdrop-blur-sm items-center border-b border-cyan-900`}
+        } sticky top-0 px-8 py-2 backdrop-blur-sm items-center  mx-auto z-10`}
       >
         <button
           onClick={toggleForm}
-          className="w-fit text-rose-400 border-rose-400 border flex items-center gap-1 px-2 rounded-md hover:font-bold hover:text-rose-500 hover:border-rose-500"
+          className="w-fit text-rose-400 border-rose-400 border-2 font-bold flex items-center gap-1 px-2 rounded-md hover:bg-rose-200 hover:text-rose-500 hover:border-rose-500"
         >
           {label === "Property" ? (
             <MdAddHome />

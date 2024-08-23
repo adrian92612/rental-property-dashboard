@@ -42,7 +42,7 @@ export const SideBar = () => {
           <TfiMenuAlt />
         </button>
         {showNav && (
-          <ul className="absolute top-[200%] z-10 bg-cyan-900 px-2 py-5 flex flex-col gap-2 text-sm">
+          <ul className="absolute top-[200%] z-20 bg-cyan-900 px-2 py-5 flex flex-col gap-2 text-sm">
             {links.map((link) => (
               <Link key={link.href} href={link.href} className={linkClass}>
                 {link.icon} {link.label}

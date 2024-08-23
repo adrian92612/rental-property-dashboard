@@ -12,14 +12,14 @@ const PropertiesPage = async () => {
     a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
   );
   return (
-    <div className="h-screen">
+    <>
       <FormModal variant="mobile" label={"Property"}>
         <PropertyForm property={null} />
       </FormModal>
-      <h1>Properties</h1>
       <FormModal variant="desktop" label={"Property"}>
         <PropertyForm property={null} />
       </FormModal>
+      <h1>Properties</h1>
       {properties.length && (
         <ul className="flex flex-wrap gap-2 justify-center sm:justify-start">
           {sortedProperties.map((property) => (
@@ -29,7 +29,7 @@ const PropertiesPage = async () => {
           ))}
         </ul>
       )}
-    </div>
+    </>
   );
 };
 
