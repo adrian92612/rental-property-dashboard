@@ -2,13 +2,16 @@
 
 import { useState } from "react";
 import { IoIosCloseCircle } from "react-icons/io";
+import { IoKey, IoPersonAdd } from "react-icons/io5";
+import { MdAddHome } from "react-icons/md";
 
 type FormModalProps = {
   variant: "mobile" | "desktop";
+  label: "Property" | "Unit" | "Tenant";
   children?: React.ReactNode;
 };
 
-export const FormModal = ({ variant, children }: FormModalProps) => {
+export const FormModal = ({ variant, children, label }: FormModalProps) => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const toggleForm = () => setShowForm(!showForm);
 
@@ -25,7 +28,14 @@ export const FormModal = ({ variant, children }: FormModalProps) => {
           onClick={toggleForm}
           className="w-fit text-rose-400 border-rose-400 border flex items-center gap-1 px-2 rounded-md hover:font-bold hover:text-rose-500 hover:border-rose-500"
         >
-          show form
+          {label === "Property" ? (
+            <MdAddHome />
+          ) : label === "Unit" ? (
+            <IoKey />
+          ) : (
+            <IoPersonAdd />
+          )}
+          Add {label}
         </button>
       </div>
       {showForm && (

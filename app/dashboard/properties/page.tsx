@@ -13,11 +13,11 @@ const PropertiesPage = async () => {
   );
   return (
     <div className="h-screen">
-      <FormModal variant="mobile">
+      <FormModal variant="mobile" label={"Property"}>
         <PropertyForm property={null} />
       </FormModal>
       <h1>Properties</h1>
-      <FormModal variant="desktop">
+      <FormModal variant="desktop" label={"Property"}>
         <PropertyForm property={null} />
       </FormModal>
       {properties.length && (

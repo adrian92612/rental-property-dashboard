@@ -12,9 +12,11 @@ const UnitsPage = async () => {
 
   if (!units || !tenants || !properties) return <div></div>;
 
-  return (
-    <UnitsPageClient units={units} tenants={tenants} properties={properties} />
-  );
+  // return (
+  //   <UnitsPageClient units={units} tenants={tenants} properties={properties} />
+  // );
+
+  return <div></div>;
 };
 
 export default UnitsPage;
