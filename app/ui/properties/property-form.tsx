@@ -61,8 +61,6 @@ export const PropertyForm = ({ property }: Props) => {
             type="number"
             name="units"
             id="units"
-            min={1}
-            step={1}
             defaultValue={state.units ?? 1}
             disabled={state.updateSuccess || isPending}
           />

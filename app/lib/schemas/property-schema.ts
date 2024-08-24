@@ -12,7 +12,10 @@ export const propertySchema = z.object({
     .min(1, "Address is required")
     .max(100, "Cannot be more than 100 characters"),
   units: z
-    .number()
+    .number({
+      required_error: "Units is required",
+      invalid_type_error: "Units must be a number",
+    })
     .int("Must be a whole number")
     .min(1, "There must be at least 1 unit")
     .optional(),

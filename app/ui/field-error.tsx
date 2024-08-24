@@ -1,8 +1,9 @@
 import { PropertyFormData } from "../lib/schemas/property-schema";
+import { UnitFormData } from "../lib/schemas/unit-schema";
 
 type FieldErrorProps = {
   error: Record<string, string[]>;
-  label: keyof PropertyFormData;
+  label: keyof PropertyFormData | keyof UnitFormData;
 };
 
 export const FieldError = ({ error, label }: FieldErrorProps) => {

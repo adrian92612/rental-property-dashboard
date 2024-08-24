@@ -84,16 +84,11 @@ export const getPropertyWithUnitsAndTenants = async (
 export const upsertProperty = async (prevState: any, formData: FormData) => {
   try {
     const userId = await getUserId();
-
     const data: PropertyFormData = {
       name: formData.get("name") as string,
       address: formData.get("address") as string,
-      units: formData.has("units")
-        ? parseInt(formData.get("units") as string, 10)
-        : undefined,
-      propertyId: formData.get("propertyId")
-        ? (formData.get("propertyId") as string)
-        : undefined,
+      units: parseInt(formData.get("units") as string, 10) ?? undefined,
+      propertyId: (formData.get("propertyId") as string) ?? undefined,
     };
 
     prevState = {
@@ -103,10 +98,9 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     const parsedData = propertySchema.safeParse(data);
 
     if (!parsedData.success) {
-      const formattedErrors = parsedData.error.flatten().fieldErrors;
-      return { ...prevState, errors: formattedErrors };
+      const errors = parsedData.error.flatten().fieldErrors;
+      return { ...prevState, errors };
     }
-
     const { name, address, units, propertyId } = parsedData.data;
 
     const property = await prisma.property.upsert({

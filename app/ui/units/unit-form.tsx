@@ -9,6 +9,7 @@ import {
   UnitWithPropertyTenantName,
   upsertUnit,
 } from "@/app/lib/actions-units";
+import { FieldError } from "../field-error";
 
 type UnitFormProps = {
   unit?: UnitWithPropertyTenantName;
@@ -26,10 +27,12 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
     }),
   });
 
+  console.log(state);
+
   const router = useRouter();
   const unitUrl = `/dashboard/units/${unit?.id}`;
 
-  if (state.updateSuccess) router.push(unitUrl);
+  if (state.success && unit) router.push(unitUrl);
 
   return (
     <form action={action} className="flex flex-col">
@@ -56,16 +59,21 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
             <option value="" disabled className="bg-cyan-800">
               -- Select a Property --
             </option>
-            {properties.map((property) => (
-              <option
-                key={property.id}
-                value={property.id}
-                className="bg-cyan-800"
-              >
-                {property.name}
-              </option>
-            ))}
+            {properties
+              .sort((a, b) =>
+                a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
+              )
+              .map((property) => (
+                <option
+                  key={property.id}
+                  value={property.id}
+                  className="bg-cyan-800"
+                >
+                  {property.name}
+                </option>
+              ))}
           </select>
+          <FieldError error={state.errors} label="propertyId" />
         </>
       )}
 
@@ -76,6 +84,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
         id="number"
         defaultValue={state.number}
       />
+      <FieldError error={state.errors} label="number" />
 
       <Label htmlFor="rentAmount">Monthly Rent</Label>
       <Input
@@ -83,8 +92,9 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
         name="rentAmount"
         id="rentAmount"
         min={0}
-        defaultValue={state.rentAmount}
+        defaultValue={state.rentAmount ?? 0}
       />
+      <FieldError error={state.errors} label="rentAmount" />
 
       <Label htmlFor="dueDate">Due Date</Label>
       <select
@@ -103,6 +113,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
           </option>
         ))}
       </select>
+      <FieldError error={state.errors} label="dueDate" />
 
       {tenants && (
         <>
@@ -113,15 +124,19 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
             defaultValue={state.tenantId}
             className="input-custom"
           >
-            <option value="">No Tenant</option>
+            <option value="" className="bg-cyan-800">
+              No Tenant
+            </option>
             {tenants?.length &&
               tenants.map((tenant) => (
                 <option
                   key={tenant.id}
                   value={tenant.id}
+                  className="bg-cyan-800"
                 >{`${tenant.firstName} ${tenant.lastName}`}</option>
               ))}
           </select>
+          <FieldError error={state.errors} label="tenantId" />
         </>
       )}
 
@@ -133,135 +148,9 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
 
       {state.error && <span className="text-red-400">{state.error}</span>}
       {state.success && <span className="text-green-400">{state.success}</span>}
-      {state.updateSuccess && (
-        <span className="text-green-700">{state.updateSuccess}</span>
-      )}
     </form>
   );
 };
-
-// export const UnitForm = ({ properties, unit, tenants }: Props) => {
-//   const [state, action, isPending] = useActionState(upsertUnit, {
-//     ...(unit &&
-//       tenants && {
-//         number: unit.number,
-//         rentAmount: unit.rentAmount,
-//         dueDate: unit.dueDate,
-//         tenantId: unit.tenant?.id ?? "",
-//       }),
-//   });
-
-//   const router = useRouter();
-//   const unitUrl = `/dashboard/units/${unit?.id}`;
-
-//   if (state.updateSuccess) {
-//     router.push(unitUrl);
-//   }
-
-//   console.log(state);
-//   return (
-//     <form action={action} className="flex flex-col" inert={state.updateSuccess}>
-//       {unit && (
-//         <>
-//           <input type="hidden" name="unitId" defaultValue={unit?.id} />
-//           <input
-//             type="hidden"
-//             name="propertyId"
-//             defaultValue={unit?.propertyId}
-//           />
-//         </>
-//       )}
-
-//       {properties && (
-//         <>
-//           <Label htmlFor="propertyId">Property</Label>
-//           <select
-//             name="propertyId"
-//             id="propertyId"
-//             defaultValue={state.propertyId ?? ""}
-//             className="input-custom"
-//           >
-//             <option value="" disabled>
-//               -- Select a Property --
-//             </option>
-//             {properties.map((prop) => (
-//               <option key={prop.id} value={prop.id}>
-//                 {prop.name}
-//               </option>
-//             ))}
-//           </select>
-//         </>
-//       )}
-
-//       <Label htmlFor="number">Unit No.</Label>
-//       <Input
-//         type="text"
-//         name="number"
-//         id="number"
-//         defaultValue={state.number}
-//       />
-
-//       <Label htmlFor="rentAmount">Monthly Rent</Label>
-//       <Input
-//         type="number"
-//         name="rentAmount"
-//         id="rentAmount"
-//         min={0}
-//         defaultValue={state.rentAmount}
-//       />
-
-//       <Label htmlFor="dueDate">Due Date</Label>
-//       <select
-//         name="dueDate"
-//         id="dueDate"
-//         required
-//         defaultValue={state.dueDate}
-//         className="input-custom"
-//       >
-//         <option value="" disabled>
-//           -- Select Due Date --
-//         </option>
-//         {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
-//           <option key={day} value={day}>
-//             {day}
-//           </option>
-//         ))}
-//       </select>
-
-//       {tenants && (
-//         <>
-//           <Label htmlFor="tenantId">Select a Tenant</Label>
-//           <select
-//             name="tenantId"
-//             id="tenantId"
-//             defaultValue={state.tenantId}
-//             className="input-custom"
-//           >
-//             <option value="">No Tenant</option>
-//             {tenants.map((tenant) => (
-//               <option
-//                 key={tenant.id}
-//                 value={tenant.id}
-//               >{`${tenant.firstName} ${tenant.lastName}`}</option>
-//             ))}
-//           </select>
-//         </>
-//       )}
-
-//       <FormButtons
-//         isPending={isPending}
-//         isEditMode={!!unit}
-//         cancelUrl={unitUrl}
-//       />
-
-//       {state.error && <span className="text-red-400">{state.error}</span>}
-//       {state.success && <span className="text-green-400">{state.success}</span>}
-//       {state.updateSuccess && (
-//         <span className="text-green-700">{state.updateSuccess}</span>
-//       )}
-//     </form>
-//   );
-// };
 
 /*
 model Unit {
