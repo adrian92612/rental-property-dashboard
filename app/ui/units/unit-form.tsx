@@ -7,16 +7,8 @@ import { useRouter } from "next/navigation";
 import { Label, Input } from "../form-elements";
 import {
   UnitWithPropertyTenantName,
-  UnitWithTenant,
   upsertUnit,
 } from "@/app/lib/actions-units";
-import { PropertyWithUnits } from "@/app/lib/actions-properties";
-
-// interface Props {
-//   properties: PropertyWithUnits[] | null;
-//   unit: UnitWithTenant;
-//   tenants: Tenant[];
-// }
 
 type UnitFormProps = {
   unit?: UnitWithPropertyTenantName;
@@ -61,11 +53,15 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
             defaultValue={state.propertyId ?? ""}
             className="input-custom"
           >
-            <option value="" disabled>
+            <option value="" disabled className="bg-cyan-800">
               -- Select a Property --
             </option>
             {properties.map((property) => (
-              <option key={property.id} value={property.id}>
+              <option
+                key={property.id}
+                value={property.id}
+                className="bg-cyan-800"
+              >
                 {property.name}
               </option>
             ))}
@@ -98,11 +94,11 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
         defaultValue={state.dueDate}
         className="input-custom"
       >
-        <option value="" disabled>
+        <option value="" disabled className="bg-cyan-800">
           -- Select Due Date --
         </option>
         {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
-          <option key={day} value={day}>
+          <option key={day} value={day} className="bg-cyan-800">
             {day}
           </option>
         ))}

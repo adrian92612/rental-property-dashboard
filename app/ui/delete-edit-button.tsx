@@ -77,8 +77,8 @@ export const DeleteEditBtn = ({ id, model }: Props) => {
         </div>
       ) : (
         <div>
-          <p className="font-bold">Confirm delete?</p>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <p className="font-bold">Confirm delete?</p>
             <button onClick={handleDelete} className="hover:text-rose-400">
               {isPending ? "Deleting..." : "Yes"}
             </button>

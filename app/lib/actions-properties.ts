@@ -97,7 +97,6 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     };
 
     prevState = {
-      ...prevState,
       ...data,
     };
 
@@ -105,7 +104,7 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
 
     if (!parsedData.success) {
       const formattedErrors = parsedData.error.flatten().fieldErrors;
-      return { ...prevState, errors: formattedErrors, success: "", error: "" };
+      return { ...prevState, errors: formattedErrors };
     }
 
     const { name, address, units, propertyId } = parsedData.data;
@@ -146,14 +145,12 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     revalidatePath("/dashboard/properties");
     return {
       success: `${name} with ${units} units created successfully.`,
-      error: "",
     };
   } catch (error) {
     console.log(error);
     return {
       ...prevState,
       error: "Failed to create/update property and unit/s.",
-      success: "",
     };
   }
 };

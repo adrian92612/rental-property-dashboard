@@ -16,10 +16,7 @@ const UnitsPage = async () => {
 
   return (
     <>
-      <FormModal variant={"mobile"} label={"Unit"}>
-        <UnitForm properties={properties} tenants={tenants} />
-      </FormModal>
-      <FormModal variant={"desktop"} label={"Unit"}>
+      <FormModal label="Unit">
         <UnitForm properties={properties} tenants={tenants} />
       </FormModal>
       <div className="h-screen pt-2">
