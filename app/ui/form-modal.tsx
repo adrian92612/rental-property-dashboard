@@ -6,23 +6,20 @@ import { IoKey, IoPersonAdd } from "react-icons/io5";
 import { MdAddHome } from "react-icons/md";
 
 type FormModalProps = {
-  variant: "mobile" | "desktop";
   label: "Property" | "Unit" | "Tenant";
   children?: React.ReactNode;
 };
 
-export const FormModal = ({ variant, children, label }: FormModalProps) => {
+export const FormModal = ({ children, label }: FormModalProps) => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const toggleForm = () => setShowForm(!showForm);
 
   return (
     <>
       <div
-        className={`${
-          variant === "mobile"
-            ? "flex sm:hidden justify-center"
-            : "hidden sm:flex justify-end"
-        } sticky top-0 px-8 py-2 backdrop-blur-sm items-center  mx-auto z-10`}
+        className={
+          "flex justify-center sm:justify-end sticky top-0 px-8 py-2 backdrop-blur-sm items-center  mx-auto z-10"
+        }
       >
         <button
           onClick={toggleForm}

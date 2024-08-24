@@ -13,10 +13,7 @@ const PropertiesPage = async () => {
   );
   return (
     <>
-      <FormModal variant="mobile" label={"Property"}>
-        <PropertyForm property={null} />
-      </FormModal>
-      <FormModal variant="desktop" label={"Property"}>
+      <FormModal label={"Property"}>
         <PropertyForm property={null} />
       </FormModal>
       <h1>Properties</h1>

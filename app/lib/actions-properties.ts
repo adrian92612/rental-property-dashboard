@@ -128,7 +128,7 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
 
     if (propertyId) {
       return {
-        success: `${property.name} has been successfully updated`,
+        success: `${property.name} has been successfully updated, redirecting to property details page...`,
       };
     }
 
