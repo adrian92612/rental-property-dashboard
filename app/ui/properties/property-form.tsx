@@ -22,9 +22,9 @@ export const PropertyForm = ({ property }: Props) => {
   const router = useRouter();
   const propertyUrl = `/dashboard/properties/${property?.id}`;
 
-  if (state.success && property) {
-    router.push(propertyUrl);
-  }
+  const updateSuccess: boolean = !!state.success && !!property;
+
+  if (updateSuccess) router.push(propertyUrl);
 
   return (
     <form action={action} className="flex flex-col">
@@ -38,7 +38,7 @@ export const PropertyForm = ({ property }: Props) => {
         name="name"
         id="name"
         placeholder="Prima Building"
-        disabled={state.updateSuccess || isPending}
+        disabled={updateSuccess || isPending}
         defaultValue={state.name}
       />
       <FieldError error={state.errors} label="name" />
@@ -49,7 +49,7 @@ export const PropertyForm = ({ property }: Props) => {
         name="address"
         id="address"
         placeholder="123 some street some place, some city"
-        disabled={state.updateSuccess || isPending}
+        disabled={updateSuccess || isPending}
         defaultValue={state.address}
       />
       <FieldError error={state.errors} label={"address"} />
@@ -62,14 +62,14 @@ export const PropertyForm = ({ property }: Props) => {
             name="units"
             id="units"
             defaultValue={state.units ?? 1}
-            disabled={state.updateSuccess || isPending}
+            disabled={updateSuccess || isPending}
           />
           <FieldError error={state.errors} label={"units"} />
         </>
       )}
 
       <FormButtons
-        isPending={isPending}
+        isPending={isPending || updateSuccess}
         isEditMode={!!property}
         cancelUrl={propertyUrl}
       />

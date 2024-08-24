@@ -87,7 +87,9 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     const data: PropertyFormData = {
       name: formData.get("name") as string,
       address: formData.get("address") as string,
-      units: parseInt(formData.get("units") as string, 10) ?? undefined,
+      units: formData.has("units")
+        ? parseInt(formData.get("units") as string, 10)
+        : undefined,
       propertyId: (formData.get("propertyId") as string) ?? undefined,
     };
 

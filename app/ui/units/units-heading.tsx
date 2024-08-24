@@ -18,7 +18,7 @@ export const UnitsHeadings = ({
   };
 
   return (
-    <div className="flex items-center border-b-2 font-poppins font-bold sticky">
+    <div className="flex items-center border-b-2 font-poppins font-bold">
       <button className="units-cell" onClick={() => requestSort("number")}>
         Unit No. {getSortIndicator("number")}
       </button>

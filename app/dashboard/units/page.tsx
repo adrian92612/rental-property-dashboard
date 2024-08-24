@@ -1,13 +1,13 @@
 import { getProperties } from "@/app/lib/actions-properties";
 import { getTenants } from "@/app/lib/actions-tenants";
-import { getUnitWithPropertyTenantName } from "@/app/lib/actions-units";
+import { getUnitsWithPropertyTenantName } from "@/app/lib/actions-units";
 import { FormModal } from "@/app/ui/form-modal";
 import { UnitForm } from "@/app/ui/units/unit-form";
 import { UnitList } from "@/app/ui/units/unit-list";
 
 const UnitsPage = async () => {
   const [units, tenants, properties] = await Promise.all([
-    getUnitWithPropertyTenantName(),
+    getUnitsWithPropertyTenantName(),
     getTenants(),
     getProperties(),
   ]);

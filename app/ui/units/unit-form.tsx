@@ -27,12 +27,10 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
     }),
   });
 
-  console.log(state);
-
   const router = useRouter();
   const unitUrl = `/dashboard/units/${unit?.id}`;
-
-  if (state.success && unit) router.push(unitUrl);
+  const updateSucces: boolean = !!state.success && !!unit;
+  if (updateSucces) router.push(unitUrl);
 
   return (
     <form action={action} className="flex flex-col">
@@ -54,6 +52,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
             name="propertyId"
             id="propertyId"
             defaultValue={state.propertyId ?? ""}
+            disabled={updateSucces || isPending}
             className="input-custom"
           >
             <option value="" disabled className="bg-cyan-800">
@@ -83,6 +82,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
         name="number"
         id="number"
         defaultValue={state.number}
+        disabled={updateSucces || isPending}
       />
       <FieldError error={state.errors} label="number" />
 
@@ -93,6 +93,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
         id="rentAmount"
         min={0}
         defaultValue={state.rentAmount ?? 0}
+        disabled={updateSucces || isPending}
       />
       <FieldError error={state.errors} label="rentAmount" />
 
@@ -102,6 +103,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
         id="dueDate"
         required
         defaultValue={state.dueDate}
+        disabled={updateSucces || isPending}
         className="input-custom"
       >
         <option value="" disabled className="bg-cyan-800">
@@ -122,6 +124,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
             name="tenantId"
             id="tenantId"
             defaultValue={state.tenantId}
+            disabled={updateSucces || isPending}
             className="input-custom"
           >
             <option value="" className="bg-cyan-800">
@@ -141,7 +144,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
       )}
 
       <FormButtons
-        isPending={isPending}
+        isPending={isPending || updateSucces}
         isEditMode={!!unit}
         cancelUrl={unitUrl}
       />

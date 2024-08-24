@@ -26,7 +26,7 @@ export const FormButtons = ({ isPending, isEditMode, cancelUrl }: Props) => {
       </button>
       {isEditMode && (
         <Link href={cancelUrl} className="hover:text-rose-500 hover:font-bold">
-          {isPending ? "Canceling..." : "Cancel"}
+          Cancel
         </Link>
       )}
     </div>

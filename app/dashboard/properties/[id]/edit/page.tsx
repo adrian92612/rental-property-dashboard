@@ -9,8 +9,8 @@ const EditPropertyPage = async ({ params }: { params: { id: string } }) => {
   if (!property) redirect("/dashboard/properties");
 
   return (
-    <div className="h-full flex flex-col items-center gap-4">
-      <h1 className="font-bold text-lg mt-10">{`Edit ${property.name}`}</h1>
+    <div className="h-full flex flex-col justify-center items-center gap-4">
+      <h1 className="font-bold text-lg">Edit {property.name}</h1>
       <EditFormWrapper>
         <PropertyForm property={property} />
       </EditFormWrapper>

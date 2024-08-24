@@ -47,7 +47,37 @@ export const getUnitWithTenant = async (
   }
 };
 
-export const getUnitWithPropertyTenantName = async (): Promise<
+export const getUnitWithPropertyTenantName = async (
+  unitId: string
+): Promise<UnitWithPropertyTenantName | null> => {
+  try {
+    const unit = await prisma.unit.findUnique({
+      where: { id: unitId },
+      include: {
+        property: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        tenant: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
+    return unit;
+  } catch (error) {
+    console.log("Failed to fetch unit: ", error);
+    return null;
+  }
+};
+
+export const getUnitsWithPropertyTenantName = async (): Promise<
   UnitWithPropertyTenantName[] | null
 > => {
   try {
