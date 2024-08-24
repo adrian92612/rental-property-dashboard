@@ -6,10 +6,11 @@ import { useRouter } from "next/navigation";
 import { FormButtons } from "../form-buttons";
 import { upsertProperty } from "@/app/lib/actions-properties";
 import { Input, Label } from "../form-elements";
+import { FieldError } from "../field-error";
 
-interface Props {
+type Props = {
   property: Property | null;
-}
+};
 
 export const PropertyForm = ({ property }: Props) => {
   const [state, action, isPending] = useActionState(upsertProperty, {
@@ -21,18 +22,14 @@ export const PropertyForm = ({ property }: Props) => {
   const router = useRouter();
   const propertyUrl = `/dashboard/properties/${property?.id}`;
 
-  if (state.updateSuccess) {
+  if (state.success && property) {
     router.push(propertyUrl);
   }
 
   return (
-    <form
-      action={action}
-      className="flex flex-col"
-      inert={state.updateSuccess || isPending}
-    >
+    <form action={action} className="flex flex-col">
       {property && (
-        <input type="hidden" name="propertyId" value={property.id}></input>
+        <input type="hidden" name="propertyId" value={property.id} />
       )}
 
       <Label htmlFor="name">Name</Label>
@@ -44,6 +41,7 @@ export const PropertyForm = ({ property }: Props) => {
         disabled={state.updateSuccess || isPending}
         defaultValue={state.name}
       />
+      <FieldError error={state.errors} label="name" />
 
       <Label htmlFor="address">Address</Label>
       <Input
@@ -54,6 +52,7 @@ export const PropertyForm = ({ property }: Props) => {
         disabled={state.updateSuccess || isPending}
         defaultValue={state.address}
       />
+      <FieldError error={state.errors} label={"address"} />
 
       {!property && (
         <>
@@ -67,6 +66,7 @@ export const PropertyForm = ({ property }: Props) => {
             defaultValue={state.units ?? 1}
             disabled={state.updateSuccess || isPending}
           />
+          <FieldError error={state.errors} label={"units"} />
         </>
       )}
 
@@ -76,11 +76,8 @@ export const PropertyForm = ({ property }: Props) => {
         cancelUrl={propertyUrl}
       />
 
-      {state.error && <span className="text-red-700">{state.error}</span>}
-      {state.success && <span className="text-green-700">{state.success}</span>}
-      {state.updateSuccess && (
-        <span className="text-green-700">{state.updateSuccess}</span>
-      )}
+      <span className="text-red-400">{state.error ?? ""}</span>
+      <span className="text-green-400">{state.success ?? ""}</span>
     </form>
   );
 };

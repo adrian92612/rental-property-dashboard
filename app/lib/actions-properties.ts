@@ -5,7 +5,8 @@ import { getUserId } from "./actions";
 import prisma from "./prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
-import { profileEnd } from "console";
+import { error, profileEnd } from "console";
+import { PropertyFormData, propertySchema } from "./schemas/property-schema";
 
 export type PropertyWithUnits = Property & {
   units: Unit[];
@@ -83,22 +84,31 @@ export const getPropertyWithUnitsAndTenants = async (
 export const upsertProperty = async (prevState: any, formData: FormData) => {
   try {
     const userId = await getUserId();
-    const name = formData.get("name") as string;
-    const address = formData.get("address") as string;
-    const units = parseInt(formData.get("units") as string, 10);
-    const propertyId = formData.get("propertyId") as string | undefined;
 
-    prevState = {
-      name,
-      address,
-      units,
+    const data: PropertyFormData = {
+      name: formData.get("name") as string,
+      address: formData.get("address") as string,
+      units: formData.has("units")
+        ? parseInt(formData.get("units") as string, 10)
+        : undefined,
+      propertyId: formData.get("propertyId")
+        ? (formData.get("propertyId") as string)
+        : undefined,
     };
 
-    if (!name) return { ...prevState, error: "Property name is required" };
-    if (!address)
-      return { ...prevState, error: "Property address is required" };
-    if (!propertyId && !units)
-      return { ...prevState, error: "Minimum of 1 unit is required" };
+    prevState = {
+      ...prevState,
+      ...data,
+    };
+
+    const parsedData = propertySchema.safeParse(data);
+
+    if (!parsedData.success) {
+      const formattedErrors = parsedData.error.flatten().fieldErrors;
+      return { ...prevState, errors: formattedErrors, success: "", error: "" };
+    }
+
+    const { name, address, units, propertyId } = parsedData.data;
 
     const property = await prisma.property.upsert({
       where: { id: propertyId ?? "" },
@@ -118,18 +128,20 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
 
     if (propertyId) {
       return {
-        updateSuccess: `${property.name} has been successfully updated`,
+        success: `${property.name} has been successfully updated`,
       };
     }
 
-    const unitData = Array.from({ length: units }, (_, i) => ({
-      id: createId(),
-      number: `Unit ${i + 1}`,
-      rentAmount: 0,
-      propertyId: property.id,
-    }));
+    if (units) {
+      const unitData = Array.from({ length: units }, (_, i) => ({
+        id: createId(),
+        number: `Unit ${i + 1}`,
+        rentAmount: 0,
+        propertyId: property.id,
+      }));
 
-    await prisma.unit.createMany({ data: unitData });
+      await prisma.unit.createMany({ data: unitData });
+    }
 
     revalidatePath("/dashboard/properties");
     return {
@@ -194,5 +206,71 @@ export const deleteProperty = async (propertyId: string) => {
 //   } catch (error) {
 //     console.error("Failed to fetch property:", error);
 //     throw new Error("Failed to fetch property");
+//   }
+// };
+
+// export const upsertProperty = async (prevState: any, formData: FormData) => {
+//   try {
+//     const userId = await getUserId();
+//     const name = formData.get("name") as string;
+//     const address = formData.get("address") as string;
+//     const units = parseInt(formData.get("units") as string, 10);
+//     const propertyId = formData.get("propertyId") as string | undefined;
+
+//     prevState = {
+//       name,
+//       address,
+//       units,
+//     };
+
+//     if (!name) return { ...prevState, error: "Property name is required" };
+//     if (!address)
+//       return { ...prevState, error: "Property address is required" };
+//     if (!propertyId && !units)
+//       return { ...prevState, error: "Minimum of 1 unit is required" };
+
+//     const property = await prisma.property.upsert({
+//       where: { id: propertyId ?? "" },
+//       update: {
+//         name,
+//         address,
+//       },
+//       create: {
+//         id: createId(),
+//         name,
+//         address,
+//         user: {
+//           connect: { id: userId },
+//         },
+//       },
+//     });
+
+//     if (propertyId) {
+//       return {
+//         updateSuccess: `${property.name} has been successfully updated`,
+//       };
+//     }
+
+//     const unitData = Array.from({ length: units }, (_, i) => ({
+//       id: createId(),
+//       number: `Unit ${i + 1}`,
+//       rentAmount: 0,
+//       propertyId: property.id,
+//     }));
+
+//     await prisma.unit.createMany({ data: unitData });
+
+//     revalidatePath("/dashboard/properties");
+//     return {
+//       success: `${name} with ${units} units created successfully.`,
+//       error: "",
+//     };
+//   } catch (error) {
+//     console.log(error);
+//     return {
+//       ...prevState,
+//       error: "Failed to create/update property and unit/s.",
+//       success: "",
+//     };
 //   }
 // };

@@ -9,7 +9,7 @@ body,
 }
 
 .input-custom {
-  @apply mb-2 px-3 py-1 rounded bg-transparent border border-cyan-900 focus:ring-cyan-700 focus:ring focus:outline-none;
+  @apply mb-2 px-3 py-1 rounded bg-transparent border border-gray-100 focus:ring-cyan-700 focus:ring focus:outline-none;
 }
 
 .label-custom {
