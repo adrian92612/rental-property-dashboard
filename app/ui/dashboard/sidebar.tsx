@@ -9,7 +9,7 @@ import { FaKey } from "react-icons/fa6";
 import { MdSpaceDashboard } from "react-icons/md";
 import { TfiMenuAlt } from "react-icons/tfi";
 
-const linkClass = "flex items-center gap-2 hover:text-gray-500";
+const linkClass = "flex items-center gap-2 hover:text-rose-400";
 
 const links = [
   {
@@ -44,7 +44,12 @@ export const SideBar = () => {
         {showNav && (
           <ul className="absolute top-[200%] z-20 bg-cyan-900 px-2 py-5 flex flex-col gap-2 text-sm">
             {links.map((link) => (
-              <Link key={link.href} href={link.href} className={linkClass}>
+              <Link
+                key={link.href}
+                href={link.href}
+                className={linkClass}
+                onClick={() => setShowNav(false)}
+              >
                 {link.icon} {link.label}
               </Link>
             ))}
