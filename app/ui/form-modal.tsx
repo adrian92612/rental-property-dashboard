@@ -36,7 +36,7 @@ export const FormModal = ({ children, label }: FormModalProps) => {
         </button>
       </div>
       {showForm && (
-        <div className="p-4 backdrop-blur-sm order-0 sm:order-2 text-gray-100 fixed inset-0 flex justify-center items-center">
+        <div className="p-4 backdrop-blur-sm order-0 sm:order-2 text-gray-100 fixed inset-0 flex justify-center items-center z-10">
           <div className="bg-cyan-800 p-5 rounded-lg shadow-lg max-w-[500px] w-full">
             <button
               onClick={toggleForm}

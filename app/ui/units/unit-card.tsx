@@ -9,9 +9,9 @@ export const UnitCard = ({ unit }: UnitCardProps) => {
     <div className="flex items-center border-b-2 hover:bg-rose-200">
       <div className="units-cell">{unit.number}</div>
       <div className="units-cell">{unit.property?.name}</div>
-      <div className="units-cell-sm hidden sm:block">{unit.rentAmount}</div>
-      <div className="units-cell-sm hidden sm:block">{unit.dueDate}</div>
-      <div className="units-cell-sm">{unit.tenant ? "Occupied" : "Vacant"}</div>
+      <div className="units-cell hidden xs:block">{unit.rentAmount}</div>
+      <div className="units-cell hidden sm:block">{unit.dueDate}</div>
+      <div className="units-cell">{unit.tenant ? "Occupied" : "Vacant"}</div>
     </div>
   );
 };
