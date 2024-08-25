@@ -26,18 +26,18 @@ export const UnitsHeadings = ({
         Property Name {getSortIndicator("property")}
       </button>
       <button
-        className="units-cell-sm hidden sm:block"
+        className="units-cell hidden xs:block"
         onClick={() => requestSort("rentAmount")}
       >
         Rent Amount {getSortIndicator("rentAmount")}
       </button>
       <button
-        className="units-cell-sm hidden sm:block"
+        className="units-cell hidden sm:block"
         onClick={() => requestSort("dueDate")}
       >
         Due Date {getSortIndicator("dueDate")}
       </button>
-      <button className="units-cell-sm" onClick={() => requestSort("tenant")}>
+      <button className="units-cell" onClick={() => requestSort("tenant")}>
         Status {getSortIndicator("tenant")}
       </button>
     </div>
