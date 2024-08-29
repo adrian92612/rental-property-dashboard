@@ -2,6 +2,9 @@ import { getTenants } from "@/app/lib/actions-tenants";
 import { FormModal } from "@/app/ui/form-modal";
 import { TenantForm } from "@/app/ui/tenants/tenant-form";
 import { TenantList } from "@/app/ui/tenants/tenant-list";
+import { FormModal } from "@/app/ui/form-modal";
+import { TenantForm } from "@/app/ui/tenants/tenant-form";
+import { TenantList } from "@/app/ui/tenants/tenant-list";
 import { TenantsPageClient } from "@/app/ui/tenants/tenants-page";
 
 const TenantsPage = async () => {
