@@ -8,6 +8,10 @@ import { UnitFormData, unitSchema } from "./schemas/unit-schema";
 
 export type UnitWithTenant = Unit & { tenant: Tenant | null };
 
+export type UnitWithProperty = Unit & {
+  property: Property;
+};
+
 export type UnitWithPropertyTenant = Unit & {
   property: Property;
   tenant: Tenant | null;
@@ -24,12 +28,26 @@ export type UnitWithPropertyTenantName = Unit & {
   } | null;
 };
 
+async function getUnitOL(
+  unitId: string
+): Promise<UnitWithPropertyTenant | null> {
+  try {
+    const unit = prisma.unit.findUnique({
+      where: { id: unitId },
+      include: { property: true, tenant: true },
+    });
+    return unit;
+  } catch (error) {
+    console.log("Failed to fetch Unit: ", error);
+    return null;
+  }
+}
+
 export const getUnit = async (unitId: string): Promise<Unit | null> => {
   try {
     const unit = await prisma.unit.findUnique({
       where: { id: unitId },
     });
-
     return unit;
   } catch (error) {
     console.error("Failed to fetch unit:", error);

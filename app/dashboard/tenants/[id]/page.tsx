@@ -1,19 +1,106 @@
-import { getTenantWithUnit } from "@/app/lib/actions-tenants";
+import { getProperty } from "@/app/lib/actions-properties";
+import { getTenant } from "@/app/lib/actions-tenants";
+import { formatDate } from "@/app/lib/helpers";
 import { DeleteEditBtn } from "@/app/ui/delete-edit-button";
-import { redirect } from "next/navigation";
+import { Tenant, Unit } from "@prisma/client";
 
-const TenantDetailsPage = async ({ params }: { params: { id: string } }) => {
-  const tenant = await getTenantWithUnit(params.id);
-
-  if (!tenant) redirect("/dashboard/tenants");
+const TenantDetails = ({ tenant }: { tenant: Tenant }) => {
+  const getStatus = () => {
+    const currentDate = new Date();
+    return currentDate < tenant.leaseStart
+      ? "Upcoming"
+      : currentDate > tenant.leaseEnd
+      ? "Expired"
+      : "Active";
+  };
 
   return (
     <div>
-      <h1>Tenant Details</h1>
-      <p>{JSON.stringify(tenant)}</p>
-      <DeleteEditBtn id={tenant.id} model="tenant" />
+      <h2>Tenant Details</h2>
+      <p>
+        Full Name: {tenant.firstName} {tenant.lastName}
+      </p>
+      <p>Email: {tenant.email}</p>
+      <p>Phone Number: {tenant.phoneNumber}</p>
+      <p>Lease Term: {tenant.termInMonths} months</p>
+      <p>Start Date: {formatDate(tenant.leaseStart)}</p>
+      <p>End Date: {formatDate(tenant.leaseEnd)}</p>
+      <p>Status: {getStatus()}</p>
+      <DeleteEditBtn id={tenant.id} model={"tenant"} />
+    </div>
+  );
+};
+
+const TenantUnitDetails = async ({ unit }: { unit: Unit }) => {
+  const property = await getProperty(unit.propertyId);
+
+  const getDueDate = () => {
+    const n = unit.dueDate;
+    let suffix: string = "th";
+    if (n === 1 || n === 21 || n === 31) suffix = "st";
+    if (n === 2 || n === 22) suffix = "nd";
+    if (n === 3 || n === 23) suffix = "rd";
+    return n + suffix;
+  };
+  return (
+    <div>
+      <h2>Unit Information</h2>
+      <p>Unit Number: {unit.number}</p>
+      <p>Property Name: {property?.name}</p>
+      <p>Property Address: {property?.address}</p>
+      <p>Due Date: {getDueDate()} of each month</p>
+    </div>
+  );
+};
+
+const TenantDetailsPage = async ({ params }: { params: { id: string } }) => {
+  const tenant = await getTenant(params.id);
+
+  if (!tenant) return <div>No Tenant Found</div>;
+
+  return (
+    <div>
+      <TenantDetails tenant={tenant} />
+      {tenant.unit && <TenantUnitDetails unit={tenant.unit} />}
     </div>
   );
 };
 
 export default TenantDetailsPage;
+
+/*
+Tenant Details
+
+Full Name: John Doe
+Email: john.doe@example.com
+Phone Number: 555-1234
+Lease Term: 12 Months
+Lease Start Date: January 1, 2024
+Lease End Date: December 31, 2024
+Status: Active
+Unit Information
+
+Unit Number: 101
+Property Name: Prima Building
+Property Address: 123 Main St, Springfield
+Monthly Rent: $1,200
+Due Date: 5th of each month
+Financial Information
+
+Security Deposit: $1,200
+Outstanding Balance: $0
+Maintenance and Requests
+
+Recent Maintenance Requests: [List or link]
+View All Maintenance Requests: [Button/Link]
+Lease Agreements and Attachments
+
+Lease Agreement: [Download Link]
+Inspection Reports: [Download Link]
+Actions
+
+Edit Tenant Information [Button]
+Remove Tenant [Button]
+Add Maintenance Request [Button]
+Send Rent Reminder [Button]
+*/

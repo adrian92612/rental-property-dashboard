@@ -19,6 +19,23 @@ export const getTenants = async (): Promise<Tenant[] | null> => {
   }
 };
 
+export const getTenant = async (
+  tenantId: string
+): Promise<TenantWithUnit | null> => {
+  try {
+    const tenant = prisma.tenant.findUnique({
+      where: {
+        id: tenantId,
+      },
+      include: { unit: true },
+    });
+    return tenant;
+  } catch (error) {
+    console.log("Failed to fetch tenant", error);
+    return null;
+  }
+};
+
 export const getTenantWithUnit = async (
   tenantId: string
 ): Promise<TenantWithUnit | null> => {
