@@ -18,7 +18,7 @@ const TenantDetails = ({ tenant }: { tenant: Tenant }) => {
   };
 
   return (
-    <div className={cardClass}>
+    <div className="detail-card">
       <h2 className="detail-card-h2">Tenant Details</h2>
       <p>
         Full Name: {tenant.firstName} {tenant.lastName}
@@ -47,7 +47,7 @@ const TenantUnitDetails = async ({ unit }: { unit: Unit }) => {
     return n + suffix;
   };
   return (
-    <div className={cardClass}>
+    <div className="detail-card">
       <h2 className="detail-card-h2">Unit Information</h2>
       <p>Unit Number: {unit.number}</p>
       <p>Property Name: {property?.name}</p>
@@ -59,7 +59,7 @@ const TenantUnitDetails = async ({ unit }: { unit: Unit }) => {
 
 const FinancialInfo = () => {
   return (
-    <div className={cardClass}>
+    <div className="detail-card">
       <h2 className="detail-card-h2">Financial Information</h2>
       <p>Security Deposit: $1,200</p>
       <p>Outstanding Balance: $0.00</p>
@@ -69,7 +69,7 @@ const FinancialInfo = () => {
 
 const MaintenanceAndRequests = () => {
   return (
-    <div className={cardClass}>
+    <div className="detail-card">
       <h2 className="detail-card-h2">Maintenance & Requests</h2>
       <div className="flex items-center gap-2">
         Maintenance and Requests
@@ -84,7 +84,7 @@ const MaintenanceAndRequests = () => {
 
 const LeaseAgreementAndAttachments = () => {
   return (
-    <div className={cardClass}>
+    <div className="detail-card">
       <h2 className="detail-card-h2">Lease Agreement & Attachments</h2>
       <div className="flex items-center gap-2">
         <p>Lease Agreement</p>
