@@ -23,3 +23,19 @@ body,
 .units-cell-sm {
   @apply w-20 p-2 text-center;
 }
+
+.detail-container {
+  @apply flex flex-col justify-center items-center my-4;
+}
+
+.detail-card {
+  @apply flex flex-col p-2 w-full max-w-[400px] bg-gray-200 border h-fit rounded-xl text-cyan-900 shadow-lg;
+}
+
+.detail-card-h2 {
+  @apply font-poppins font-bold text-lg;
+}
+
+.detail-card-btn {
+  @apply italic text-rose-400 border border-rose-400 rounded px-2 hover:text-rose-500 hover:bg-rose-200;
+}

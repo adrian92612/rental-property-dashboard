@@ -14,8 +14,8 @@ type UnitDetailsProp = {
 
 const UnitDetails = ({ unit }: UnitDetailsProp) => {
   return (
-    <div className="bg-blue-100 p-4 rounded">
-      <h2 className="font-poppins font-bold text-lg">Unit Details</h2>
+    <div className="detail-card">
+      <h2 className="detail-card-h2">Unit Details</h2>
       <p>Unit Number: {unit.number}</p>
       <p>Property Name: {unit.property.name}</p>
       <p>Property Address: {unit.property.address}</p>
@@ -25,15 +25,8 @@ const UnitDetails = ({ unit }: UnitDetailsProp) => {
       <p>Occupancy Status: {unit.tenant ? "Occupied" : "Vacant"}</p>
       <DeleteEditBtn id={unit.id} model={"unit"} />
       <div className="flex items-center gap-2">
-        <button className="italic text-rose-400 border border-rose-400 rounded px-2 hover:text-rose-500 hover:bg-rose-200">
-          Add Maintenance Request
-        </button>
-        <button className="italic text-rose-400 border border-rose-400 rounded px-2 hover:text-rose-500 hover:bg-rose-200">
-          Send Rent Reminder
-        </button>
-        <button className="italic text-rose-400 border border-rose-400 rounded px-2 hover:text-rose-500 hover:bg-rose-200">
-          View Lease Agreement
-        </button>
+        <button className="detail-card-btn w-full">Send Rent Reminder</button>
+        <button className="detail-card-btn w-full">View Lease Agreement</button>
       </div>
     </div>
   );
@@ -41,8 +34,8 @@ const UnitDetails = ({ unit }: UnitDetailsProp) => {
 
 const UnitTenantInfo = ({ tenant }: { tenant: Tenant }) => {
   return (
-    <div className="bg-blue-100 p-4 rounded">
-      <h2 className="font-poppins font-bold text-lg">Tenant Information</h2>
+    <div className="detail-card">
+      <h2 className="detail-card-h2">Tenant Information</h2>
       <p>
         Name: {tenant.firstName} {tenant.lastName}
       </p>
@@ -58,8 +51,8 @@ const UnitTenantInfo = ({ tenant }: { tenant: Tenant }) => {
 
 const UnitFinancialInfo = () => {
   return (
-    <div className="bg-blue-100 p-4 rounded">
-      <h2 className="font-poppins font-bold text-lg">Financial Information</h2>
+    <div className="detail-card">
+      <h2 className="detail-card-h2">Financial Information</h2>
       <p>Security Deposit: $1200.00</p>
       <p>Outstanding Balance: $0.00</p>
     </div>
@@ -68,41 +61,32 @@ const UnitFinancialInfo = () => {
 
 const UnitMaintenanceInspection = () => {
   return (
-    <div className="bg-blue-100 p-4 rounded">
-      <h2 className="font-poppins font-bold text-lg">
-        Maintenance and Inspection
-      </h2>
+    <div className="detail-card">
+      <h2 className="detail-card-h2">Maintenance and Inspection</h2>
       <div className="flex items-center gap-2">
         <p>Recent Maintenance Requests: </p>
-        <button className="italic text-rose-400 border border-rose-400 rounded px-2 hover:text-rose-500 hover:bg-rose-200">
-          View All
-        </button>
+        <button className="detail-card-btn">View All</button>
       </div>
       <div className="flex items-center gap-2">
         <p>Inspection History: </p>
-        <button className="italic text-rose-400 border border-rose-400 rounded px-2 hover:text-rose-500 hover:bg-rose-200">
-          View All
-        </button>
+        <button className="detail-card-btn">View All</button>
       </div>
+      <button className="detail-card-btn mt-1">Add Maintenance Request</button>
     </div>
   );
 };
 
 const UnitAttachments = () => {
   return (
-    <div className="bg-blue-100 p-4 rounded">
-      <h2 className="font-poppins font-bold text-lg">Attachments</h2>
+    <div className="detail-card">
+      <h2 className="detail-card-h2">Attachments</h2>
       <div className="flex items-center gap-2">
         <p>Lease Agreement: </p>
-        <button className="italic text-rose-400 border border-rose-400 rounded px-2 hover:text-rose-500 hover:bg-rose-200">
-          Download
-        </button>
+        <button className="detail-card-btn">Download</button>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mt-1">
         <p>Inspection Report: </p>
-        <button className="italic text-rose-400 border border-rose-400 rounded px-2 hover:text-rose-500 hover:bg-rose-200">
-          Download
-        </button>
+        <button className="detail-card-btn">Download</button>
       </div>
     </div>
   );
@@ -114,7 +98,7 @@ const UnitDetailsPage = async ({ params }: { params: { id: string } }) => {
   if (!unit) redirect("/dashboard/units");
 
   return (
-    <div className="flex flex-col justify-center items-center h-full">
+    <div className="detail-container">
       <div className="flex flex-col gap-4">
         <UnitDetails unit={unit} />
         {unit.tenant && <UnitTenantInfo tenant={unit.tenant} />}

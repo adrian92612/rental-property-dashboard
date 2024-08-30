@@ -4,6 +4,9 @@ import { formatDate } from "@/app/lib/helpers";
 import { DeleteEditBtn } from "@/app/ui/delete-edit-button";
 import { Tenant, Unit } from "@prisma/client";
 
+const cardClass =
+  "flex flex-col p-2 w-full max-w-[400px] bg-gray-300 border h-fit rounded-xl text-cyan-900 shadow-lg";
+
 const TenantDetails = ({ tenant }: { tenant: Tenant }) => {
   const getStatus = () => {
     const currentDate = new Date();
@@ -15,8 +18,8 @@ const TenantDetails = ({ tenant }: { tenant: Tenant }) => {
   };
 
   return (
-    <div>
-      <h2>Tenant Details</h2>
+    <div className={cardClass}>
+      <h2 className="detail-card-h2">Tenant Details</h2>
       <p>
         Full Name: {tenant.firstName} {tenant.lastName}
       </p>
@@ -27,6 +30,7 @@ const TenantDetails = ({ tenant }: { tenant: Tenant }) => {
       <p>End Date: {formatDate(tenant.leaseEnd)}</p>
       <p>Status: {getStatus()}</p>
       <DeleteEditBtn id={tenant.id} model={"tenant"} />
+      <button className="detail-card-btn">Send Rent Reminder</button>
     </div>
   );
 };
@@ -43,12 +47,53 @@ const TenantUnitDetails = async ({ unit }: { unit: Unit }) => {
     return n + suffix;
   };
   return (
-    <div>
-      <h2>Unit Information</h2>
+    <div className={cardClass}>
+      <h2 className="detail-card-h2">Unit Information</h2>
       <p>Unit Number: {unit.number}</p>
       <p>Property Name: {property?.name}</p>
       <p>Property Address: {property?.address}</p>
       <p>Due Date: {getDueDate()} of each month</p>
+    </div>
+  );
+};
+
+const FinancialInfo = () => {
+  return (
+    <div className={cardClass}>
+      <h2 className="detail-card-h2">Financial Information</h2>
+      <p>Security Deposit: $1,200</p>
+      <p>Outstanding Balance: $0.00</p>
+    </div>
+  );
+};
+
+const MaintenanceAndRequests = () => {
+  return (
+    <div className={cardClass}>
+      <h2 className="detail-card-h2">Maintenance & Requests</h2>
+      <div className="flex items-center gap-2">
+        Maintenance and Requests
+        <button className="detail-card-btn">View All</button>
+      </div>
+      <button className="detail-card-btn mt-1">
+        Add a maintenance request
+      </button>
+    </div>
+  );
+};
+
+const LeaseAgreementAndAttachments = () => {
+  return (
+    <div className={cardClass}>
+      <h2 className="detail-card-h2">Lease Agreement & Attachments</h2>
+      <div className="flex items-center gap-2">
+        <p>Lease Agreement</p>
+        <button className="detail-card-btn">Download</button>
+      </div>
+      <div className="flex items-center gap-2 mt-1">
+        <p>Inspection Report</p>
+        <button className="detail-card-btn">Download</button>
+      </div>
     </div>
   );
 };
@@ -59,9 +104,14 @@ const TenantDetailsPage = async ({ params }: { params: { id: string } }) => {
   if (!tenant) return <div>No Tenant Found</div>;
 
   return (
-    <div>
-      <TenantDetails tenant={tenant} />
-      {tenant.unit && <TenantUnitDetails unit={tenant.unit} />}
+    <div className="detail-container">
+      <div className="flex flex-col gap-4">
+        <TenantDetails tenant={tenant} />
+        {tenant.unit && <TenantUnitDetails unit={tenant.unit} />}
+        <FinancialInfo />
+        <MaintenanceAndRequests />
+        <LeaseAgreementAndAttachments />
+      </div>
     </div>
   );
 };
