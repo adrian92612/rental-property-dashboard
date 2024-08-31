@@ -43,6 +43,28 @@ export const getProperties = async (): Promise<Property[] | null> => {
   }
 };
 
+export const getPropertiesWithUnitsAndTenants = async (): Promise<
+  PropertyWithUnitsAndTenant[] | null
+> => {
+  try {
+    const userId = await getUserId();
+    const properties = await prisma.property.findMany({
+      where: { userId: userId },
+      include: {
+        units: {
+          include: {
+            tenant: true,
+          },
+        },
+      },
+    });
+    return properties;
+  } catch (error) {
+    console.error("Failed to fetch properties: ", error);
+    return null;
+  }
+};
+
 export const getPropertiesWithUnits = async (): Promise<
   PropertyWithUnits[] | null
 > => {
