@@ -162,8 +162,8 @@ export const upsertUnit = async (prevState: any, formData: FormData) => {
   const parsedData = unitSchema.safeParse(data);
 
   if (!parsedData.success) {
-    const errors = parsedData.error.flatten().fieldErrors;
-    return { ...prevState, errors };
+    const fieldErrors = parsedData.error.flatten().fieldErrors;
+    return { ...prevState, fieldErrors };
   }
   const { unitId, tenantId, propertyId, number, rentAmount, dueDate } =
     parsedData.data;

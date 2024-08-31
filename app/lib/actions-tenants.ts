@@ -4,6 +4,7 @@ import { Tenant, Unit } from "@prisma/client";
 import prisma from "./prisma";
 import { revalidatePath } from "next/cache";
 import { createId } from "@paralleldrive/cuid2";
+import { TenantFormData, tenantSchema } from "./schemas/tenant-schema";
 
 export type TenantWithUnit = Tenant & {
   unit: Unit | null;
@@ -52,41 +53,37 @@ export const getTenantWithUnit = async (
 };
 
 export const upsertTenant = async (prevState: any, formData: FormData) => {
-  const tenantId = formData.get("tenantId") as string;
-  const unitId = formData.get("unitId") as string;
-  const firstName = formData.get("firstName") as string;
-  const lastName = formData.get("lastName") as string;
-  const email = formData.get("email") as string;
-  const phoneNumber = formData.get("phoneNumber") as string;
-  const leaseStartValue = formData.get("leaseStart") as string;
-  const leaseEndValue = formData.get("leaseEnd") as string;
-  const termInMonths = parseInt(formData.get("termInMonths") as string);
+  const data: TenantFormData = {
+    tenantId: formData.get("tenantId") as string,
+    unitId: (formData.get("unitId") as string) ?? undefined,
+    firstName: formData.get("firstName") as string,
+    lastName: formData.get("lastName") as string,
+    email: formData.get("email") as string,
+    phoneNumber: formData.get("phoneNumber") as string,
+    termInMonths: parseInt(formData.get("termInMonths") as string, 10),
+    leaseStart: new Date(formData.get("leaseStart") as string),
+    leaseEnd: new Date(formData.get("leaseEnd") as string),
+  };
 
-  // Convert dates to Date objects
-  const leaseStart = new Date(leaseStartValue);
-  const leaseEnd = new Date(leaseEndValue);
+  prevState = { ...data };
+  const parsedData = tenantSchema.safeParse(data);
 
-  const currentState = {
-    ...prevState,
+  if (!parsedData.success) {
+    const fieldErrors = parsedData.error.flatten().fieldErrors;
+    return { ...prevState, fieldErrors };
+  }
+
+  const {
+    tenantId,
+    unitId,
     firstName,
     lastName,
     email,
     phoneNumber,
+    termInMonths,
     leaseStart,
     leaseEnd,
-    termInMonths,
-  };
-
-  // Check for missing values
-  if (!firstName) return { ...currentState, error: "First name is required" };
-  if (!lastName) return { ...currentState, error: "Last name is required" };
-  if (!email) return { ...currentState, error: "Email is required" };
-  if (!phoneNumber)
-    return { ...currentState, error: "Phone number is required" };
-  if (!leaseStartValue)
-    return { ...currentState, error: "Lease start date is required" };
-  if (!leaseEndValue)
-    return { ...currentState, error: "Lease end date is required" };
+  } = parsedData.data;
 
   try {
     const existingTenant = await prisma.tenant.findUnique({
@@ -95,7 +92,7 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
 
     if (existingTenant && existingTenant.id !== tenantId) {
       return {
-        ...currentState,
+        ...prevState,
         error: "A tenant with this email already exists.",
       };
     }
@@ -130,19 +127,18 @@ export const upsertTenant = async (prevState: any, formData: FormData) => {
 
     if (tenantId) {
       return {
-        updateSuccess: `${firstName} ${lastName} has been successfully updated.`,
+        success: `${firstName} ${lastName} has been successfully updated.`,
       };
     }
 
     revalidatePath("/dashboard/tenants");
     return {
       success: `${firstName} ${lastName} has been added to Tenants`,
-      error: "",
     };
   } catch (error) {
     const msg = `Failed to ${tenantId ? "update" : "add"} tenant`;
     console.log(msg, error);
-    return { ...currentState, error: msg };
+    return { ...prevState, error: msg };
   }
 };
 

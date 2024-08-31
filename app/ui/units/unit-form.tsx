@@ -72,7 +72,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
                 </option>
               ))}
           </select>
-          <FieldError error={state.errors} label="propertyId" />
+          <FieldError error={state.fieldErrors} label="propertyId" />
         </>
       )}
 
@@ -84,7 +84,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
         defaultValue={state.number}
         disabled={updateSucces || isPending}
       />
-      <FieldError error={state.errors} label="number" />
+      <FieldError error={state.fieldErrors} label="number" />
 
       <Label htmlFor="rentAmount">Monthly Rent</Label>
       <Input
@@ -95,7 +95,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
         defaultValue={state.rentAmount ?? 0}
         disabled={updateSucces || isPending}
       />
-      <FieldError error={state.errors} label="rentAmount" />
+      <FieldError error={state.fieldErrors} label="rentAmount" />
 
       <Label htmlFor="dueDate">Due Date</Label>
       <select
@@ -115,7 +115,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
           </option>
         ))}
       </select>
-      <FieldError error={state.errors} label="dueDate" />
+      <FieldError error={state.fieldErrors} label="dueDate" />
 
       {tenants && (
         <>
@@ -139,7 +139,7 @@ export const UnitForm = ({ unit, tenants, properties }: UnitFormProps) => {
                 >{`${tenant.firstName} ${tenant.lastName}`}</option>
               ))}
           </select>
-          <FieldError error={state.errors} label="tenantId" />
+          <FieldError error={state.fieldErrors} label="tenantId" />
         </>
       )}
 

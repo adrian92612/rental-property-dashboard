@@ -41,7 +41,7 @@ export const PropertyForm = ({ property }: Props) => {
         disabled={updateSuccess || isPending}
         defaultValue={state.name}
       />
-      <FieldError error={state.errors} label="name" />
+      <FieldError error={state.fieldErrors} label="name" />
 
       <Label htmlFor="address">Address</Label>
       <Input
@@ -52,7 +52,7 @@ export const PropertyForm = ({ property }: Props) => {
         disabled={updateSuccess || isPending}
         defaultValue={state.address}
       />
-      <FieldError error={state.errors} label={"address"} />
+      <FieldError error={state.fieldErrors} label={"address"} />
 
       {!property && (
         <>
@@ -64,7 +64,7 @@ export const PropertyForm = ({ property }: Props) => {
             defaultValue={state.units ?? 1}
             disabled={updateSuccess || isPending}
           />
-          <FieldError error={state.errors} label={"units"} />
+          <FieldError error={state.fieldErrors} label={"units"} />
         </>
       )}
 
@@ -74,8 +74,8 @@ export const PropertyForm = ({ property }: Props) => {
         cancelUrl={propertyUrl}
       />
 
-      <span className="text-red-400">{state.error ?? ""}</span>
-      <span className="text-green-400">{state.success ?? ""}</span>
+      {state.error && <span className="text-red-400">{state.error}</span>}
+      {state.success && <span className="text-green-400">{state.success}</span>}
     </form>
   );
 };

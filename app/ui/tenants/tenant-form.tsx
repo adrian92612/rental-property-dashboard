@@ -7,6 +7,7 @@ import { Input, Label } from "../form-elements";
 import { FormButtons } from "../form-buttons";
 import { useRouter } from "next/navigation";
 import { upsertTenant } from "@/app/lib/actions-tenants";
+import { FieldError } from "../field-error";
 
 type TenantFormProps = {
   tenant: Tenant | null;
@@ -27,6 +28,8 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
     }),
   });
 
+  console.log(state);
+
   const [term, setTerm] = useState(tenant ? state.termInMonths : 1);
   const [termStart, setTermStart] = useState(tenant ? state.leaseStart : "");
   const [termEnd, setTermEnd] = useState(tenant ? state.leaseEnd : "");
@@ -37,7 +40,6 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
       setTerm(1);
       setTermStart("");
       setTermEnd("");
-      state.success = "";
     }
   }, [state]);
 
@@ -55,8 +57,7 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
       endDate.setDate(0); // Set to the last day of the previous month
     }
 
-    const formatted = formatDate(endDate);
-    setTermEnd(formatted);
+    setTermEnd(formatDate(endDate));
   };
 
   const handleTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,15 +73,18 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
   };
 
   const tenantUrl = `/dashboard/tenants/${tenant?.id}`;
+  const updateSuccess: boolean = !!tenant && !!state.success;
 
-  if (tenant && state.updateSuccess) {
-    router.push(tenantUrl);
-  }
+  if (updateSuccess) router.push(tenantUrl);
 
   return (
-    <form action={action} className="flex flex-col" inert={state.updateSuccess}>
-      <input type="hidden" name="tenantId" defaultValue={state.id} />
-      <input type="hidden" name="unitId" defaultValue={state.unitId} />
+    <form action={action} className="flex flex-col" noValidate={true}>
+      <input type="hidden" name="tenantId" defaultValue={tenant?.id} />
+      <input
+        type="hidden"
+        name="unitId"
+        defaultValue={tenant?.unitId ?? undefined}
+      />
 
       <Label htmlFor="firstName">First Name</Label>
       <Input
@@ -89,6 +93,7 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
         id="firstName"
         defaultValue={state.firstName}
       />
+      <FieldError error={state.fieldErrors} label={"firstName"} />
 
       <Label htmlFor="lastName">Last Name</Label>
       <Input
@@ -97,9 +102,11 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
         id="lastName"
         defaultValue={state.lastName}
       />
+      <FieldError error={state.fieldErrors} label={"lastName"} />
 
       <Label htmlFor="email">Email</Label>
       <Input type="email" name="email" id="email" defaultValue={state.email} />
+      <FieldError error={state.fieldErrors} label={"email"} />
 
       <Label htmlFor="phoneNumber">Phone Number</Label>
       <Input
@@ -108,6 +115,7 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
         id="phoneNumber"
         defaultValue={state.phoneNumber}
       />
+      <FieldError error={state.fieldErrors} label={"phoneNumber"} />
 
       <Label htmlFor="termInMonths">Term in months</Label>
       <Input
@@ -119,16 +127,17 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
         value={term}
         onChange={handleTermChange}
       />
+      <FieldError error={state.fieldErrors} label={"termInMonths"} />
 
       <Label htmlFor="leaseStart">Lease Start</Label>
       <Input
         type="date"
         name="leaseStart"
         id="leaseStart"
-        required
         value={termStart}
         onChange={handleStartDateChange}
       />
+      <FieldError error={state.fieldErrors} label={"leaseStart"} />
 
       <Label htmlFor="leaseEnd">Lease End</Label>
       <Input
@@ -138,18 +147,16 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
         readOnly
         value={termEnd}
       />
+      <FieldError error={state.fieldErrors} label={"leaseEnd"} />
 
       <FormButtons
-        isPending={isPending}
+        isPending={isPending || updateSuccess}
         isEditMode={!!tenant}
         cancelUrl={tenantUrl}
       />
 
       {state.error && <span className="text-red-400">{state.error}</span>}
       {state.success && <span className="text-green-400">{state.success}</span>}
-      {state.updateSuccess && (
-        <span className="text-green-700">{state.updateSuccess}</span>
-      )}
     </form>
   );
 };

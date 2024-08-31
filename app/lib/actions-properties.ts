@@ -122,8 +122,8 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     const parsedData = propertySchema.safeParse(data);
 
     if (!parsedData.success) {
-      const errors = parsedData.error.flatten().fieldErrors;
-      return { ...prevState, errors };
+      const fieldErrors = parsedData.error.flatten().fieldErrors;
+      return { ...prevState, fieldErrors };
     }
     const { name, address, units, propertyId } = parsedData.data;
 
