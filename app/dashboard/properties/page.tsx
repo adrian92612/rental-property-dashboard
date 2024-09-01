@@ -18,7 +18,7 @@ const PropertiesPage = async () => {
       </FormModal>
       <h1>Properties</h1>
       {!!properties.length && (
-        <ul className="flex flex-wrap gap-2 justify-center sm:justify-start">
+        <ul className="flex flex-wrap gap-4 justify-center sm:justify-start">
           {sortedProperties.map((property) => (
             <li key={property.id}>
               <PropertyCard property={property} />

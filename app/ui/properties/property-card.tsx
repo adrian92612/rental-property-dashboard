@@ -12,16 +12,15 @@ export const PropertyCard = ({ property }: Props) => {
   const { id, name, address, image, createdAt, units } = property;
 
   return (
-    <div className="flex flex-col max-w-[400px] border-b-4 p-2 text-sm">
-      <div className="w-[300px] h-[225px] flex justify-center items-center overflow-hidden">
+    <div className="flex flex-col max-w-[400px] p-4 text-sm bg-gray-100 rounded-lg shadow-lg shadow-slate-400">
+      <div className="relative w-[300px] h-[225px] flex justify-center items-center overflow-hidden">
         <Image
           src={image ? image : ""}
           alt={"image of property"}
           quality={50}
           priority={true}
-          width={300}
-          height={300}
           style={{ objectFit: "contain" }}
+          fill={true}
         />
       </div>
       <div className="flex flex-col">

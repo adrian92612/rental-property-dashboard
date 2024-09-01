@@ -63,11 +63,11 @@ export const PropertyForm = ({ property }: Props) => {
             disabled={updateSuccess || isPending}
           />
           <FieldError error={state.fieldErrors} label={"units"} />
+
+          <Label htmlFor="imageFile">Upload Image</Label>
+          <Input type="file" accept="image/*" name="imageFile" id="imageFile" />
         </>
       )}
-
-      <Label htmlFor="imageFile">Upload Image</Label>
-      <Input type="file" accept="image/*" name="imageFile" id="imageFile" />
 
       <FormButtons
         isPending={isPending || updateSuccess}

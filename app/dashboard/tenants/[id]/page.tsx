@@ -4,9 +4,6 @@ import { formatDate } from "@/app/lib/helpers";
 import { DeleteEditBtn } from "@/app/ui/delete-edit-button";
 import { Tenant, Unit } from "@prisma/client";
 
-const cardClass =
-  "flex flex-col p-2 w-full max-w-[400px] bg-gray-300 border h-fit rounded-xl text-cyan-900 shadow-lg";
-
 const TenantDetails = ({ tenant }: { tenant: Tenant }) => {
   const getStatus = () => {
     const currentDate = new Date();

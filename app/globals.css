@@ -29,7 +29,7 @@ body,
 }
 
 .detail-card {
-  @apply flex flex-col p-2 w-full max-w-[400px] bg-gray-100 border h-fit rounded-xl text-cyan-900 shadow-lg;
+  @apply flex flex-col p-2 w-full max-w-[400px] bg-gray-100 border h-fit rounded-xl text-cyan-900 shadow-lg shadow-slate-400;
 }
 
 .detail-card-h2 {

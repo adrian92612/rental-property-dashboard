@@ -1,12 +1,11 @@
 "use server";
 
 import { Property, Tenant, Unit } from "@prisma/client";
-import { getUserId } from "./actions";
+import { getUserId, uploadImage } from "./actions";
 import prisma from "./prisma";
 import { createId } from "@paralleldrive/cuid2";
 import { revalidatePath } from "next/cache";
 import { PropertyFormData, propertySchema } from "./schemas/property-schema";
-import { cloudinary } from "./cloudinary-config";
 
 export type PropertyWithUnits = Property & {
   units: Unit[];
@@ -128,17 +127,7 @@ export const upsertProperty = async (prevState: any, formData: FormData) => {
     const { name, address, units, propertyId } = parsedData.data;
 
     const imageFile = formData.get("imageFile") as File;
-    let imageUrl: string | undefined;
-
-    if (imageFile && imageFile.type.startsWith("image/")) {
-      console.log(imageFile);
-      const arrayBuffer = await imageFile.arrayBuffer();
-      const base64Data = Buffer.from(arrayBuffer).toString("base64");
-      const dataURI = `data:${imageFile.type};base64,${base64Data}`;
-
-      const res = await cloudinary.uploader.upload(dataURI);
-      imageUrl = res.secure_url;
-    }
+    const imageUrl = await uploadImage(imageFile);
 
     const property = await prisma.property.upsert({
       where: { id: propertyId ?? "" },
