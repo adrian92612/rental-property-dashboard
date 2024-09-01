@@ -13,7 +13,7 @@ export const PropertyCard = ({ property }: Props) => {
 
   return (
     <div className="flex flex-col max-w-[400px] p-4 text-sm bg-gray-100 rounded-lg shadow-lg shadow-slate-400">
-      <div className="relative w-[300px] h-[225px] flex justify-center items-center overflow-hidden">
+      <div className="relative w-[280px] h-[225px] flex justify-center items-center overflow-hidden">
         <Image
           src={image ? image : ""}
           alt={"image of property"}

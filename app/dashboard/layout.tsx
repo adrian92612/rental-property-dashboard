@@ -11,7 +11,7 @@ const DashboardLayout = async ({ children }: Props) => {
     <div className="h-screen flex flex-col sm:flex-row">
       <SideBar />
       <Suspense fallback={<Loading />}>
-        <main className="flex-1 border-2 px-2 overflow-y-auto scrollbar-thin">
+        <main className="flex-1 border-2 px-2 overflow-y-auto scrollbar-thin pb-8">
           {children}
         </main>
       </Suspense>
