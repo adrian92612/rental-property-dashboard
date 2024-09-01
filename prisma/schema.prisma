@@ -31,9 +31,10 @@ model User {
 }
 
 model Property {
-  id      String @id
+  id      String  @id
   name    String
   address String
+  image   String?
   units   Unit[] // Relation to units
 
   user   User   @relation(fields: [userId], references: [id])

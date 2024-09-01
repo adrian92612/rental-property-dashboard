@@ -56,7 +56,7 @@ export const UnitList = ({ units }: UnitListProps) => {
   return (
     <ul>
       <UnitsHeadings sortConfig={sortConfig} requestSort={requestSort} />
-      {units.length &&
+      {!!units.length &&
         sortedUnits.map((unit) => (
           <Link key={unit.id} href={`/dashboard/units/${unit.id}`}>
             <UnitCard unit={unit} />

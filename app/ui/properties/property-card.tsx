@@ -2,18 +2,27 @@ import { FaLocationDot } from "react-icons/fa6";
 import Link from "next/link";
 import { DeleteEditBtn } from "../delete-edit-button";
 import { PropertyWithUnits } from "@/app/lib/actions-properties";
+import Image from "next/image";
 
 interface Props {
   property: PropertyWithUnits;
 }
 
 export const PropertyCard = ({ property }: Props) => {
-  const { id, name, address, createdAt, units } = property;
+  const { id, name, address, image, createdAt, units } = property;
 
   return (
     <div className="flex flex-col max-w-[400px] border-b-4 p-2 text-sm">
-      <div className="w-[300px] h-[150px] border flex justify-center items-center">
-        Image Container
+      <div className="w-[300px] h-[225px] flex justify-center items-center overflow-hidden">
+        <Image
+          src={image ? image : ""}
+          alt={"image of property"}
+          quality={50}
+          priority={true}
+          width={300}
+          height={300}
+          style={{ objectFit: "contain" }}
+        />
       </div>
       <div className="flex flex-col">
         <h2 className="font-poppins font-normal text-xl ">{name}</h2>

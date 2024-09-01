@@ -7,6 +7,7 @@ import { FormButtons } from "../form-buttons";
 import { upsertProperty } from "@/app/lib/actions-properties";
 import { Input, Label } from "../form-elements";
 import { FieldError } from "../field-error";
+import { CldUploadWidget } from "next-cloudinary";
 
 type Props = {
   property: Property | null;
@@ -31,7 +32,6 @@ export const PropertyForm = ({ property }: Props) => {
       {property && (
         <input type="hidden" name="propertyId" value={property.id} />
       )}
-
       <Label htmlFor="name">Name</Label>
       <Input
         type="text"
@@ -42,7 +42,6 @@ export const PropertyForm = ({ property }: Props) => {
         defaultValue={state.name}
       />
       <FieldError error={state.fieldErrors} label="name" />
-
       <Label htmlFor="address">Address</Label>
       <Input
         type="text"
@@ -53,7 +52,6 @@ export const PropertyForm = ({ property }: Props) => {
         defaultValue={state.address}
       />
       <FieldError error={state.fieldErrors} label={"address"} />
-
       {!property && (
         <>
           <Label htmlFor="units">Number of Unit/s</Label>
@@ -68,12 +66,14 @@ export const PropertyForm = ({ property }: Props) => {
         </>
       )}
 
+      <Label htmlFor="imageFile">Upload Image</Label>
+      <Input type="file" accept="image/*" name="imageFile" id="imageFile" />
+
       <FormButtons
         isPending={isPending || updateSuccess}
         isEditMode={!!property}
         cancelUrl={propertyUrl}
       />
-
       {state.error && <span className="text-red-400">{state.error}</span>}
       {state.success && <span className="text-green-400">{state.success}</span>}
     </form>

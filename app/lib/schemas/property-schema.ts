@@ -19,6 +19,7 @@ export const propertySchema = z.object({
     .int("Must be a whole number")
     .min(1, "There must be at least 1 unit")
     .optional(),
+  image: z.string().optional(),
   propertyId: z.string().optional(),
 });
 
