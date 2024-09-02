@@ -4,11 +4,13 @@ import { SortConfig } from "./unit-list";
 type UnitsHeadingsProps = {
   sortConfig: SortConfig;
   requestSort: (key: keyof UnitWithPropertyTenantName) => void;
+  hideProperty?: boolean;
 };
 
 export const UnitsHeadings = ({
   sortConfig,
   requestSort,
+  hideProperty = false,
 }: UnitsHeadingsProps) => {
   const getSortIndicator = (key: keyof UnitWithPropertyTenantName) => {
     if (sortConfig.key === key) {
@@ -22,9 +24,11 @@ export const UnitsHeadings = ({
       <button className="units-cell" onClick={() => requestSort("number")}>
         Unit No. {getSortIndicator("number")}
       </button>
-      <button className="units-cell" onClick={() => requestSort("property")}>
-        Property Name {getSortIndicator("property")}
-      </button>
+      {!hideProperty && (
+        <button className="units-cell" onClick={() => requestSort("property")}>
+          Property Name {getSortIndicator("property")}
+        </button>
+      )}
       <button
         className="units-cell hidden xs:block"
         onClick={() => requestSort("rentAmount")}

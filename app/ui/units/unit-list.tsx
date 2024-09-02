@@ -8,6 +8,7 @@ import { useState } from "react";
 
 type UnitListProps = {
   units: UnitWithPropertyTenantName[];
+  hideProperty?: boolean;
 };
 
 export type SortConfig = {
@@ -15,7 +16,7 @@ export type SortConfig = {
   direction: "ascending" | "descending";
 };
 
-export const UnitList = ({ units }: UnitListProps) => {
+export const UnitList = ({ units, hideProperty = false }: UnitListProps) => {
   const [sortConfig, setSortConfig] = useState<SortConfig>({
     key: null,
     direction: "ascending",
@@ -59,7 +60,7 @@ export const UnitList = ({ units }: UnitListProps) => {
       {!!units.length &&
         sortedUnits.map((unit) => (
           <Link key={unit.id} href={`/dashboard/units/${unit.id}`}>
-            <UnitCard unit={unit} />
+            <UnitCard unit={unit} hideProperty={hideProperty} />
           </Link>
         ))}
     </ul>

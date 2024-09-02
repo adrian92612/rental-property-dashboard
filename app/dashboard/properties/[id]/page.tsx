@@ -8,13 +8,15 @@ import { DeleteEditBtn } from "@/app/ui/delete-edit-button";
 import { redirect } from "next/navigation";
 import { FaLocationDot } from "react-icons/fa6";
 import Image from "next/image";
+import { UnitWithTenant } from "@/app/lib/actions-units";
+import { UnitList } from "@/app/ui/properties/property-unit-list";
 
 const BasicInfo = ({ property }: { property: PropertyWithUnitsAndTenant }) => {
   const { name, address, image, createdAt, updatedAt } = property;
   return (
-    <section className="max-w-[700px] p-4 bg-gray-100 shadow-lg shadow-slate-400 rounded-md text-cyan-950">
+    <section className="max-w-[600px] flex-auto h-fit p-4 bg-gray-100 shadow-lg shadow-slate-400 rounded-md text-cyan-950">
       <h2 className="font-bold font-poppins text-lg border-b border-cyan-900 px-1 w-full text-center">
-        Basic Info
+        Basic Information
       </h2>
       <div className="pt-2 xs:flex gap-2">
         <div className="relative w-[280px] h-[225px] flex justify-center items-center overflow-hidden ">
@@ -51,6 +53,30 @@ const BasicInfo = ({ property }: { property: PropertyWithUnitsAndTenant }) => {
   );
 };
 
+const UnitsInfo = ({ units }: { units: UnitWithTenant[] }) => {
+  return (
+    <section className="flex-auto p-4 min-w-[250px] max-w-[400px] h-fit bg-gray-100 shadow-lg shadow-slate-400 rounded-md text-cyan-950">
+      <div>
+        <h2 className="font-poppins font-bold text-lg border-b border-cyan-900 text-center mb-2">
+          Units Information
+        </h2>
+        <p>
+          <strong>No. of Units:</strong> {units.length}
+        </p>
+        <p>
+          <strong>Total Monthly Rent:</strong>
+        </p>
+        <p>
+          <strong>Average Rent per Unit:</strong>
+        </p>
+        <p>
+          <strong>Outstanding Payments:</strong>
+        </p>
+      </div>
+    </section>
+  );
+};
+
 const PropertyDetailsPage = async ({ params }: { params: { id: string } }) => {
   const [user, property] = await Promise.all([
     await getUser(),
@@ -59,47 +85,15 @@ const PropertyDetailsPage = async ({ params }: { params: { id: string } }) => {
 
   if (!property || !user) redirect("/dashboard/properties");
 
-  const { name, address, units, createdAt, updatedAt } = property;
+  // const { name, address, units, createdAt, updatedAt } = property;
 
   return (
-    <div className="flex flex-col gap-4 p-4 overflow-y-auto h-full scrollbar-thin">
-      <BasicInfo property={property} />
-      <section>
-        <h2 className="font-bold font-poppins text-lg border-b-2 border-cyan-900 px-1 w-fit rounded-md">
-          Units Info
-        </h2>
-        <p className="mt-2 font-bold">No. of Units: {units.length}</p>
-        <p>Total Monthly Rent: {}</p>
-        <p>Average Rent per Unit: </p>
-        <p>Outstanding Payments: </p>
-        {units.length && (
-          <ul className="flex flex-wrap gap-2">
-            {units.map((unit) => {
-              const tenant = unit.tenant;
-              const start = tenant?.leaseStart
-                ? formatDate(tenant.leaseStart)
-                : "";
-              const end = tenant?.leaseEnd ? formatDate(tenant.leaseEnd) : "";
-              return (
-                <li
-                  key={unit.id}
-                  className="flex flex-col border border-cyan-900 rounded min-w-48 p-2 "
-                >
-                  <h3>{unit.number}</h3>
-                  <p>Rent: ${unit.rentAmount}</p>
-                  <p>Due Date: {unit.dueDate}</p>
-                  <p>Status: {tenant ? "Occupied" : "Vacant"}</p>
-                  <p>
-                    Tenant: {tenant && `${tenant.firstName} ${tenant.lastName}`}
-                  </p>
-                  <p>Lease Start: {start}</p>
-                  <p>Lease End: {end}</p>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
+    <div className="flex flex-col items-center justify-around gap-6 py-4 overflow-y-auto h-full scrollbar-thin">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 w-full sm:items-center sm:justify-evenly">
+        <BasicInfo property={property} />
+        <UnitsInfo units={property.units} />
+      </div>
+      <UnitList units={property.units} />
     </div>
   );
 };
