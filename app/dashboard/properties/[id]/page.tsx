@@ -14,7 +14,7 @@ import { UnitList } from "@/app/ui/properties/property-unit-list";
 const BasicInfo = ({ property }: { property: PropertyWithUnitsAndTenant }) => {
   const { name, address, image, createdAt, updatedAt } = property;
   return (
-    <section className="max-w-[600px] flex-auto h-fit p-4 bg-gray-100 shadow-lg shadow-slate-400 rounded-md text-cyan-950">
+    <section className="max-w-[600px] border flex-auto h-fit p-4 bg-gray-100 shadow-lg shadow-slate-400 rounded-md">
       <h2 className="font-bold font-poppins text-lg border-b border-cyan-900 px-1 w-full text-center">
         Basic Information
       </h2>
@@ -55,7 +55,7 @@ const BasicInfo = ({ property }: { property: PropertyWithUnitsAndTenant }) => {
 
 const UnitsInfo = ({ units }: { units: UnitWithTenant[] }) => {
   return (
-    <section className="flex-auto p-4 min-w-[250px] max-w-[400px] h-fit bg-gray-100 shadow-lg shadow-slate-400 rounded-md text-cyan-950">
+    <section className="flex-auto p-4 min-w-[250px] max-w-[400px] h-fit bg-gray-100 shadow-lg shadow-slate-400 rounded-md">
       <div>
         <h2 className="font-poppins font-bold text-lg border-b border-cyan-900 text-center mb-2">
           Units Information

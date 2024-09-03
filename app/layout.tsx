@@ -28,7 +28,7 @@ export default function RootLayout({
       lang="en"
       className={`${poppins.variable} ${lato.variable} scrollbar-thumb-cyan-700 scrollbar-track-transparent`}
     >
-      <body className="bg-slate-100 font-lato text-gray-800 text-sm max-w-screen-2xl mx-auto">
+      <body className="font-lato text-cyan-900 text-sm max-w-screen-2xl mx-auto bg-slate-50">
         {children}
       </body>
     </html>

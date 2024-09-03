@@ -4,6 +4,7 @@ import { UnitWithTenant } from "@/app/lib/actions-units";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useState } from "react";
+import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
 
 const Headings = () => {
   return (
@@ -82,12 +83,16 @@ export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
               </Link>
             ))}
           </ul>
-          <div className="flex items-center gap-4">
-            <button onClick={handlePrevPage}>Previous</button>
+          <div className="flex items-center gap-4 justify-end pr-4">
+            <button onClick={handlePrevPage}>
+              <FaArrowCircleLeft />
+            </button>
             <span>
-              {currentPage} of {totalPages}
+              {currentPage} / {totalPages}
             </span>
-            <button onClick={handleNextPage}>Next</button>
+            <button onClick={handleNextPage}>
+              <FaArrowCircleRight />
+            </button>
           </div>
         </>
       )}
