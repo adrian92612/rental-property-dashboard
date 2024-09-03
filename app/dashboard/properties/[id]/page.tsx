@@ -54,6 +54,8 @@ const BasicInfo = ({ property }: { property: PropertyWithUnitsAndTenant }) => {
 };
 
 const UnitsInfo = ({ units }: { units: UnitWithTenant[] }) => {
+  const occupiedUnits = units.filter((unit) => unit.tenant !== null).length;
+  const totalMonthlyRent = units.reduce((acc, val) => acc + val.rentAmount, 0);
   return (
     <section className="flex-auto p-4 min-w-[250px] max-w-[400px] h-fit bg-gray-100 shadow-lg shadow-slate-400 rounded-md">
       <div>
@@ -64,7 +66,10 @@ const UnitsInfo = ({ units }: { units: UnitWithTenant[] }) => {
           <strong>No. of Units:</strong> {units.length}
         </p>
         <p>
-          <strong>Total Monthly Rent:</strong>
+          <strong>No. of Occupied Units:</strong> {occupiedUnits}
+        </p>
+        <p>
+          <strong>Total Monthly Rent:</strong> {totalMonthlyRent}
         </p>
         <p>
           <strong>Average Rent per Unit:</strong>
@@ -85,10 +90,8 @@ const PropertyDetailsPage = async ({ params }: { params: { id: string } }) => {
 
   if (!property || !user) redirect("/dashboard/properties");
 
-  // const { name, address, units, createdAt, updatedAt } = property;
-
   return (
-    <div className="flex flex-col items-center justify-around gap-6 py-4 overflow-y-auto h-full scrollbar-thin">
+    <div className="flex flex-col items-center justify-center gap-6 py-4 overflow-y-auto h-full scrollbar-thin">
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-4 w-full sm:items-center sm:justify-evenly">
         <BasicInfo property={property} />
         <UnitsInfo units={property.units} />

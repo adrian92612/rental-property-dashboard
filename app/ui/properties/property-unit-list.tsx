@@ -2,9 +2,13 @@
 
 import { UnitWithTenant } from "@/app/lib/actions-units";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useState } from "react";
-import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
+import {
+  FaArrowCircleLeft,
+  FaArrowCircleRight,
+  FaSearch,
+} from "react-icons/fa";
 
 const Headings = () => {
   return (
@@ -50,10 +54,16 @@ const UnitCard = ({ unit }: { unit: UnitWithTenant }) => {
 export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const unitsPerPage = 10;
+  const [paginatedUnits, setPaginatedUnits] = useState(
+    units.slice(0, unitsPerPage)
+  );
+  const [filteredUnits, setFilteredUnits] = useState(units);
 
-  const startIndex = (currentPage - 1) * unitsPerPage;
-  const endIndex = startIndex + unitsPerPage;
-  const paginatedUnits = units.slice(startIndex, endIndex);
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * unitsPerPage;
+    const endIndex = startIndex + unitsPerPage;
+    setPaginatedUnits(filteredUnits.slice(startIndex, endIndex));
+  }, [currentPage, filteredUnits]);
 
   const totalPages = Math.ceil(units.length / unitsPerPage);
 
@@ -65,11 +75,36 @@ export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
     setCurrentPage(currentPage < totalPages ? currentPage + 1 : 1);
   };
 
+  const handleSearch = useDebouncedCallback((e) => {
+    const searchValue = e.target.value.toLowerCase();
+    const filteredUnits = units.filter((unit) => {
+      const status = unit.tenant ? "occupied" : "vacant";
+      return (
+        unit.number.toLowerCase().includes(searchValue) ||
+        unit.dueDate?.toString().includes(searchValue) ||
+        unit.rentAmount.toString().includes(searchValue) ||
+        status.includes(searchValue)
+      );
+    });
+    setFilteredUnits(filteredUnits);
+  }, 300);
+
   return (
-    <section className="p-2 rounded-md bg-gray-100 shadow-lg shadow-slate-400 w-11/12 mx-auto">
-      <h2 className="font-poppins font-bold text-center text-lg border-b border-cyan-900">
-        Unit List
-      </h2>
+    <section className="p-2 flex flex-col rounded-md border bg-gray-100 shadow-lg shadow-slate-400 w-11/12 mx-auto min-h-96">
+      <div className="flex items-center border-b justify-between border-cyan-900 py-2">
+        <div className="flex-1 max-w-52"></div>
+        <h2 className="flex-1 font-poppins font-bold text-center text-lg">
+          Unit List
+        </h2>
+        <div className="flex-1 max-w-52 relative">
+          <input
+            type="search"
+            className=" border w-full px-5 py-1 rounded-md bg-transparent border-cyan-900"
+            onChange={(e) => handleSearch(e)}
+          />
+          <FaSearch className="absolute top-1/2 right-2 translate-y-[-50%]" />
+        </div>
+      </div>
 
       {paginatedUnits && (
         <>
@@ -83,14 +118,20 @@ export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
               </Link>
             ))}
           </ul>
-          <div className="flex items-center gap-4 justify-end pr-4">
-            <button onClick={handlePrevPage}>
+          <div className="flex items-center gap-4 justify-end pr-4 text-lg mt-auto">
+            <button
+              onClick={handlePrevPage}
+              className="border hover:border-rose-400 rounded-full"
+            >
               <FaArrowCircleLeft />
             </button>
             <span>
               {currentPage} / {totalPages}
             </span>
-            <button onClick={handleNextPage}>
+            <button
+              onClick={handleNextPage}
+              className="border hover:border-rose-400 rounded-full"
+            >
               <FaArrowCircleRight />
             </button>
           </div>
