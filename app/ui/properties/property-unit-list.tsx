@@ -58,14 +58,16 @@ export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
     units.slice(0, unitsPerPage)
   );
   const [filteredUnits, setFilteredUnits] = useState(units);
+  const [totalPages, setTotalPages] = useState(
+    Math.ceil(units.length / unitsPerPage)
+  );
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * unitsPerPage;
     const endIndex = startIndex + unitsPerPage;
+    setTotalPages(Math.ceil(filteredUnits.length / unitsPerPage));
     setPaginatedUnits(filteredUnits.slice(startIndex, endIndex));
   }, [currentPage, filteredUnits]);
-
-  const totalPages = Math.ceil(units.length / unitsPerPage);
 
   const handlePrevPage = () => {
     setCurrentPage(currentPage > 1 ? currentPage - 1 : totalPages);
@@ -92,7 +94,7 @@ export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
   return (
     <section className="p-2 flex flex-col rounded-md border bg-gray-100 shadow-lg shadow-slate-400 w-11/12 mx-auto min-h-96">
       <div className="flex items-center border-b justify-between border-cyan-900 py-2">
-        <div className="flex-1 max-w-52"></div>
+        <div className="flex-1 max-w-52 hidden xs:block"></div>
         <h2 className="flex-1 font-poppins font-bold text-center text-lg">
           Unit List
         </h2>
@@ -106,37 +108,38 @@ export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
         </div>
       </div>
 
-      {paginatedUnits && (
-        <>
-          <ul>
-            <Headings />
-            {paginatedUnits.map((unit) => (
-              <Link key={unit.id} href={`/dashboard/units/${unit.id}`}>
-                <li className="border border-transparent rounded-lg hover:border-rose-400 hover:bg-rose-50  mb-1">
-                  <UnitCard unit={unit} />
-                </li>
-              </Link>
-            ))}
-          </ul>
-          <div className="flex items-center gap-4 justify-end pr-4 text-lg mt-auto">
-            <button
-              onClick={handlePrevPage}
-              className="border hover:border-rose-400 rounded-full"
-            >
-              <FaArrowCircleLeft />
-            </button>
-            <span>
-              {currentPage} / {totalPages}
-            </span>
-            <button
-              onClick={handleNextPage}
-              className="border hover:border-rose-400 rounded-full"
-            >
-              <FaArrowCircleRight />
-            </button>
-          </div>
-        </>
-      )}
+      {/* {paginatedUnits && (
+        <> */}
+      <ul>
+        <Headings />
+        {!!paginatedUnits.length &&
+          paginatedUnits.map((unit) => (
+            <Link key={unit.id} href={`/dashboard/units/${unit.id}`}>
+              <li className="border border-transparent rounded-lg hover:border-rose-400 hover:bg-rose-50 mb-1">
+                <UnitCard unit={unit} />
+              </li>
+            </Link>
+          ))}
+      </ul>
+      <div className="flex items-center gap-4 justify-end pr-4 text-lg mt-auto">
+        <button
+          onClick={handlePrevPage}
+          className="border hover:border-rose-400 rounded-full"
+        >
+          <FaArrowCircleLeft />
+        </button>
+        <span>
+          {totalPages ? currentPage : 0} / {totalPages}
+        </span>
+        <button
+          onClick={handleNextPage}
+          className="border hover:border-rose-400 rounded-full"
+        >
+          <FaArrowCircleRight />
+        </button>
+      </div>
+      {/* </>
+      )} */}
     </section>
   );
 };

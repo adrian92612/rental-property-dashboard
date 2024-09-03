@@ -61,7 +61,7 @@ export const DeleteEditBtn = ({ id, model }: Props) => {
       {!toggleDelete ? (
         <div className="flex items-center gap-2">
           <button
-            className="flex items-center italic hover:text-rose-400"
+            className="flex items-center italic pr-1 border border-transparent rounded-sm hover:border-rose-400 hover:text-rose-400"
             onClick={handleToggleDelete}
           >
             <MdDelete />
@@ -69,7 +69,7 @@ export const DeleteEditBtn = ({ id, model }: Props) => {
           </button>
           <Link
             href={`/dashboard/${route}/${id}/edit`}
-            className="flex items-center italic hover:text-rose-400"
+            className="flex items-center italic px-1 border border-transparent rounded-sm hover:border-rose-400 hover:text-rose-400"
           >
             <FaEdit />
             Edit

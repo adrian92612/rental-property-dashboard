@@ -29,7 +29,7 @@ const BasicInfo = ({ property }: { property: PropertyWithUnitsAndTenant }) => {
             fill={true}
           />
         </div>
-        <div className="flex flex-col border-l border-cyan-900 pl-2">
+        <div className="flex flex-col flex-1 border-l border-cyan-900 pl-2">
           <h2 className="font-poppins font-bold text-xl ">{name}</h2>
           <p className="flex items-center gap-2 ">
             <FaLocationDot /> {address}
@@ -46,7 +46,9 @@ const BasicInfo = ({ property }: { property: PropertyWithUnitsAndTenant }) => {
           <p>
             <strong>Last Updated At:</strong> {formatDate(updatedAt)}
           </p>
-          <DeleteEditBtn id={property.id} model="property" />
+          <div className="w-fit ml-auto">
+            <DeleteEditBtn id={property.id} model="property" />
+          </div>
         </div>
       </div>
     </section>
@@ -55,27 +57,33 @@ const BasicInfo = ({ property }: { property: PropertyWithUnitsAndTenant }) => {
 
 const UnitsInfo = ({ units }: { units: UnitWithTenant[] }) => {
   const occupiedUnits = units.filter((unit) => unit.tenant !== null).length;
+  const vacancyRate = ((units.length - occupiedUnits) / units.length) * 100;
   const totalMonthlyRent = units.reduce((acc, val) => acc + val.rentAmount, 0);
+  const averageRentPerUnit = totalMonthlyRent / units.length;
   return (
-    <section className="flex-auto p-4 min-w-[250px] max-w-[400px] h-fit bg-gray-100 shadow-lg shadow-slate-400 rounded-md">
-      <div>
+    <section className="flex-auto p-4 min-w-[250px] max-w-[400px] border bg-gray-100 shadow-lg shadow-slate-400 rounded-md">
+      <div className="border-l border-cyan-900 pl-2">
         <h2 className="font-poppins font-bold text-lg border-b border-cyan-900 text-center mb-2">
           Units Information
         </h2>
         <p>
-          <strong>No. of Units:</strong> {units.length}
+          <strong>No. of Units: </strong>
+          {units.length}
         </p>
         <p>
-          <strong>No. of Occupied Units:</strong> {occupiedUnits}
+          <strong>No. of Occupied Units: </strong>
+          {occupiedUnits}
         </p>
         <p>
-          <strong>Total Monthly Rent:</strong> {totalMonthlyRent}
+          <strong>Vacancy Rate: </strong>
+          {vacancyRate.toFixed(2)}%
         </p>
         <p>
-          <strong>Average Rent per Unit:</strong>
+          <strong>Total Monthly Rent: </strong>${totalMonthlyRent.toFixed(2)}
         </p>
         <p>
-          <strong>Outstanding Payments:</strong>
+          <strong>Average Rent per Unit: </strong>$
+          {averageRentPerUnit.toFixed(2)}
         </p>
       </div>
     </section>
