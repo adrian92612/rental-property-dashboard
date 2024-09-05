@@ -1,10 +1,16 @@
+import { string } from "zod";
 import { PropertyFormData } from "../lib/schemas/property-schema";
 import { TenantFormData } from "../lib/schemas/tenant-schema";
 import { UnitFormData } from "../lib/schemas/unit-schema";
+import { UserRegisterFormData } from "../lib/schemas/user-register-schema";
 
 type FieldErrorProps = {
   error: Record<string, string[]>;
-  label: keyof PropertyFormData | keyof UnitFormData | keyof TenantFormData;
+  label:
+    | keyof PropertyFormData
+    | keyof UnitFormData
+    | keyof TenantFormData
+    | keyof UserRegisterFormData;
 };
 
 export const FieldError = ({ error, label }: FieldErrorProps) => {
