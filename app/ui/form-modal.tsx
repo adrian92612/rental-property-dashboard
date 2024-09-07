@@ -18,12 +18,12 @@ export const FormModal = ({ children, label }: FormModalProps) => {
     <>
       <div
         className={
-          "flex justify-center sm:justify-end sticky top-0 px-8 py-2 backdrop-blur-sm items-center  mx-auto z-10"
+          "flex justify-center sm:justify-end sticky top-0 px-8 py-4 backdrop-blur-sm items-center  mx-auto z-10"
         }
       >
         <button
           onClick={toggleForm}
-          className="w-fit text-rose-400 border-rose-400 border-2 font-bold flex items-center gap-1 px-2 rounded-md hover:bg-rose-200 hover:text-rose-500 hover:border-rose-500"
+          className="w-fit text-rose-500 border-rose-500 border font-bold flex items-center gap-1 px-4 rounded-md hover:bg-rose-500 hover:text-gray-50"
         >
           {label === "Property" ? (
             <MdAddHome />

@@ -36,10 +36,11 @@ const links = [
 export const SideBar = () => {
   const [showNav, setShowNav] = useState<boolean>(false);
   return (
-    <div className="flex sm:flex-col sm:p-8 sm:m-5 sm:rounded-xl justify-between items-center bg-cyan-900 p-2 text-gray-200 text-lg font-poppins">
+    <div className="flex sm:flex-col sm:p-8 sm:m-5 sm:rounded-sm justify-between items-center bg-cyan-900 p-2 text-gray-200 text-lg font-poppins">
       <div className="relative flex items-center sm:hidden">
         <button onClick={() => setShowNav(!showNav)} className={linkClass}>
           <TfiMenuAlt />
+          sm:m-5 sm:rounded-xl
         </button>
         {showNav && (
           <ul className="absolute top-[200%] z-20 bg-cyan-900 px-2 py-5 flex flex-col gap-2 text-sm">
@@ -57,7 +58,7 @@ export const SideBar = () => {
         )}
       </div>
 
-      <ul className="hidden sm:flex flex-col gap-2 items-end">
+      <ul className="hidden sm:flex flex-col gap-2">
         {links.map((link) => (
           <Link key={link.href} href={link.href} className={linkClass}>
             {link.icon} {link.label}
