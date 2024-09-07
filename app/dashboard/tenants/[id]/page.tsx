@@ -102,13 +102,11 @@ const TenantDetailsPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="detail-container">
-      <div className="flex flex-col gap-4">
-        <TenantDetails tenant={tenant} />
-        {tenant.unit && <TenantUnitDetails unit={tenant.unit} />}
-        <FinancialInfo />
-        <MaintenanceAndRequests />
-        <LeaseAgreementAndAttachments />
-      </div>
+      <TenantDetails tenant={tenant} />
+      {tenant.unit && <TenantUnitDetails unit={tenant.unit} />}
+      <FinancialInfo />
+      <MaintenanceAndRequests />
+      <LeaseAgreementAndAttachments />
     </div>
   );
 };

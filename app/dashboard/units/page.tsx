@@ -19,7 +19,7 @@ const UnitsPage = async () => {
       <FormModal label="Unit">
         <UnitForm properties={properties} tenants={tenants} />
       </FormModal>
-      <div className="h-full pt-2">
+      <div className="min-h-[95%] p-2 sm:border-l-2 border-cyan-900">
         <h1 className="font-poppins font-bold text-xl text-center w-fit mx-auto px-4 border-b border-cyan-900">
           Unit List
         </h1>

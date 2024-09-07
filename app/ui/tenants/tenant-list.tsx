@@ -49,12 +49,16 @@ export const TenantList = ({ tenants }: TenantListProps) => {
 
   return (
     <ul>
-      <TenantsHeadings sortConfig={sortConfig} requestSort={requestSort} />
+      <li>
+        <TenantsHeadings sortConfig={sortConfig} requestSort={requestSort} />
+      </li>
       {tenants.length &&
         sortedTenants.map((tenant) => (
-          <Link key={tenant.id} href={`/dashboard/tenants/${tenant.id}`}>
-            <TenantCard tenant={tenant} />
-          </Link>
+          <li key={tenant.id}>
+            <Link href={`/dashboard/tenants/${tenant.id}`}>
+              <TenantCard tenant={tenant} />
+            </Link>
+          </li>
         ))}
     </ul>
   );

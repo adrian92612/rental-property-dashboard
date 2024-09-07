@@ -21,19 +21,15 @@ body,
 }
 
 .units-cell {
-  @apply flex-1 max-w-24 text-left;
-}
-
-.units-cell-sm {
-  @apply w-20 p-2 text-center;
+  @apply flex-1 break-all text-left p-1;
 }
 
 .detail-container {
-  @apply flex flex-wrap my-5 p-8 gap-5 h-full justify-center;
+  @apply flex flex-wrap my-5 p-8 gap-8 min-h-fit justify-center;
 }
 
 .detail-card {
-  @apply flex flex-col p-5 w-full max-w-lg h-80 bg-gray-100 border border-cyan-900 rounded-xl text-cyan-900 shadow-lg shadow-slate-600;
+  @apply flex flex-col p-5 w-full max-w-lg h-80 bg-gray-50 border border-cyan-900 rounded-xl text-cyan-900 shadow-lg shadow-slate-600;
 }
 
 .detail-card-h2 {

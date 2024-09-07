@@ -6,7 +6,7 @@ type UnitCardProps = {
 
 export const UnitCard = ({ unit }: UnitCardProps) => {
   return (
-    <div className="units-cell-container py-1 border-b border-cyan-900 hover:bg-cyan-900 hover:text-gray-50">
+    <div className="units-cell-container border-b border-cyan-900 hover:bg-cyan-900 hover:text-rose-400 hover:font-bold">
       <div className="units-cell">{unit.number}</div>
       <div className="units-cell">{unit.property?.name}</div>
       <div className="units-cell hidden xs:block">{unit.rentAmount}</div>
