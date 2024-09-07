@@ -6,6 +6,7 @@ import { cloudinary } from "./cloudinary-config";
 import { userRegisterSchema } from "./schemas/user-register-schema";
 import { createId } from "@paralleldrive/cuid2";
 import { genSalt, hashSync } from "bcrypt-ts";
+import { revalidatePath } from "next/cache";
 
 export const registerUser = async (prevState: any, formData: FormData) => {
   console.log(formData);
@@ -60,7 +61,54 @@ export const registerUser = async (prevState: any, formData: FormData) => {
   }
 };
 
-export const login = async (formData: FormData) => {
+export const login = async (prevState: any, formData: FormData) => {
+  const provider = formData.get("action") as string | null;
+  console.log("PREVSTATE: ", prevState);
+  try {
+    if (provider === "credentials") {
+      console.log("credentials");
+      const result = await signIn(provider, {
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+        redirectTo: "/dashboard",
+      });
+      console.log("RESULT: ", result);
+      return { result };
+    }
+    if (provider) {
+      console.log("provider");
+      await signIn(provider, { redirectTo: "/dashboard" });
+    }
+    return { success: "Login successfully" };
+  } catch (error) {
+    console.log("Failed to login: ", error);
+    return { ...prevState, error: "Invalid Credentials" };
+  }
+};
+
+// type credentialsLoginStateProp = {
+
+// }
+
+export const credentialsLogin = async (prevState: any, formData: FormData) => {
+  console.log("PREVSTATE: ", prevState);
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  prevState = { email, password };
+  try {
+    await signIn("credentials", {
+      redirect: false,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+    });
+    return { ...prevState, result: "Login successful", success: true };
+  } catch (error) {
+    console.error("Failed to login: ", error);
+    return { ...prevState, result: "Invalid Credentials" };
+  }
+};
+
+export const socialLogin = async (formData: FormData) => {
   const provider = formData.get("action") as string | null;
   if (provider) await signIn(provider, { redirectTo: "/dashboard" });
 };

@@ -1,29 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { login } from "@/app/lib/actions";
+import { credentialsLogin } from "@/app/lib/actions";
+import { useActionState } from "react";
+import { useRouter } from "next/navigation";
+import { SocialLoginForm } from "./social-login-form";
 
 export const LoginForm = () => {
+  const [state, action, isPending] = useActionState(credentialsLogin, {
+    email: "",
+    password: "",
+    result: "",
+  });
+
+  const router = useRouter();
+
+  if (state.success) {
+    router.push("/dashboard");
+    return <div>{state.result}</div>;
+  }
+
   return (
-    <div>
-      <form action={login} className="flex flex-col">
-        <label htmlFor="email">Email Address</label>
-        <input type="text" name="email" id="email" placeholder="john.doe@example.com" />
-        <label htmlFor="password">Password</label>
-        <input type="password" name="password" id="passowrd" placeholder="Enter your password" />
-        <button>Log In</button>
-        <div className="flex items-center my-4">
-          <div className="flex-grow h-px bg-gray-300"></div>
-          <span className="px-4 text-sm text-gray-500">or</span>
-          <div className="flex-grow h-px bg-gray-300"></div>
-        </div>
-        <button name="action" value="google">
-          Login using Google
-        </button>
-        <div>
-          <Link href="/register">Don&apos;t have account? Register here.</Link>
-        </div>
-      </form>
-    </div>
+    <form action={action} className="flex flex-col w-full">
+      <label htmlFor="email">Email Address</label>
+      <input
+        type="text"
+        name="email"
+        id="email"
+        placeholder="john.doe@example.com"
+        defaultValue={state.email}
+      />
+      <label htmlFor="password">Password</label>
+      <input
+        type="password"
+        name="password"
+        id="passowrd"
+        placeholder="Enter your password"
+        defaultValue={state.password}
+      />
+      <button type="submit" disabled={isPending}>
+        {isPending ? "Logging in..." : "Log in"}
+      </button>
+      {state.result && <span>{state.result}</span>}
+    </form>
   );
 };

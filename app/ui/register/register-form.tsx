@@ -12,7 +12,7 @@ export const RegisterForm = () => {
   return (
     <form
       action={action}
-      className="flex flex-col w-full max-w-md border bg-gray-50 p-4 shadow-lg shadow-slate-600 rounded-md "
+      className="flex flex-col w-full max-w-md border bg-gray-50 p-4 shadow-lg shadow-black rounded-xl "
     >
       <Label htmlFor="email">Email</Label>
       <Input
