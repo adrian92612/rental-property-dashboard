@@ -4,11 +4,28 @@ import { registerUser } from "@/app/lib/actions";
 import { useActionState } from "react";
 import { Input, Label } from "../form-elements";
 import { FieldError } from "../field-error";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export const RegisterForm = () => {
   const [state, action, isPending] = useActionState(registerUser, {});
+  const router = useRouter();
 
-  console.log("STATE: ", state);
+  if (!!state.success) {
+    router.push("/login");
+    return (
+      <div className="p-5 bg-gray-50 rounded-xl shadow-lg shadow-black">
+        <p className="font-bold text-lg text-emerald-700">{state.success}</p>
+        <p className="text-right">
+          Redirecting to{" "}
+          <Link href="/login" className="font-bold underline">
+            login page
+          </Link>{" "}
+          ...
+        </p>
+      </div>
+    );
+  }
   return (
     <form
       action={action}
@@ -62,7 +79,7 @@ export const RegisterForm = () => {
       <FieldError error={state.fieldErrors} label={"confirmPassword"} />
 
       <button
-        className="font-poppins font-bold text-xl bg-rose-100 rounded-lg w-fit ml-auto px-5"
+        className="font-poppins font-bold text-xl border border-cyan-900 rounded-xl hover:bg-cyan-900 hover:text-gray-50"
         disabled={isPending}
       >
         {isPending ? "Signing Up..." : "Sign Up"}

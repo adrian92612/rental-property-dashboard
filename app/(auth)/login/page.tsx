@@ -8,12 +8,12 @@ const LoginPage = async () => {
       <div className="max-w-[400px] w-[90%] p-4 rounded-xl flex flex-col justify-center items-center border bg-gray-50 border-cyan-900 shadow-lg shadow-black">
         <LoginForm />
         <div className="flex items-center my-4 w-full">
-          <div className="flex-grow h-px bg-gray-300"></div>
+          <div className="flex-grow h-px bg-cyan-900"></div>
           <span className="px-4 text-sm">or</span>
-          <div className="flex-grow h-px bg-gray-300"></div>
+          <div className="flex-grow h-px bg-cyan-900"></div>
         </div>
         <SocialLoginForm />
-        <div className="border-b">
+        <div className="border-b border-cyan-900 mt-2">
           <Link href="/register">Don&apos;t have account? Register here.</Link>
         </div>
       </div>

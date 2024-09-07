@@ -4,44 +4,56 @@ import Link from "next/link";
 import { credentialsLogin } from "@/app/lib/actions";
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
-import { SocialLoginForm } from "./social-login-form";
+import { Input } from "../form-elements";
 
 export const LoginForm = () => {
-  const [state, action, isPending] = useActionState(credentialsLogin, {
-    email: "",
-    password: "",
-    result: "",
-  });
+  const [state, action, isPending] = useActionState(credentialsLogin, {});
 
   const router = useRouter();
 
   if (state.success) {
     router.push("/dashboard");
-    return <div>{state.result}</div>;
+    return (
+      <div className="w-full">
+        <p className="text-emerald-700 text-lg font-bold text-center">
+          {state.result}
+        </p>
+        <p className="text-right">
+          Redirecting to{" "}
+          <Link href="/dashboard" className="font-bold underline">
+            dashboard
+          </Link>{" "}
+          ...
+        </p>
+      </div>
+    );
   }
 
   return (
     <form action={action} className="flex flex-col w-full">
-      <label htmlFor="email">Email Address</label>
-      <input
-        type="text"
+      <Input
         name="email"
         id="email"
-        placeholder="john.doe@example.com"
+        placeholder="Email Address"
         defaultValue={state.email}
       />
-      <label htmlFor="password">Password</label>
-      <input
-        type="password"
+
+      <Input
         name="password"
-        id="passowrd"
-        placeholder="Enter your password"
+        id="password"
+        type="password"
+        placeholder="Password"
         defaultValue={state.password}
       />
-      <button type="submit" disabled={isPending}>
+
+      {state.result && <span className="text-red-400">* {state.result}</span>}
+      <button
+        type="submit"
+        disabled={isPending}
+        className="text-lg font-bold px-4 border rounded-xl border-cyan-900 hover:bg-cyan-900 hover:text-gray-50"
+      >
         {isPending ? "Logging in..." : "Log in"}
       </button>
-      {state.result && <span>{state.result}</span>}
     </form>
   );
 };

@@ -6,10 +6,8 @@ import { cloudinary } from "./cloudinary-config";
 import { userRegisterSchema } from "./schemas/user-register-schema";
 import { createId } from "@paralleldrive/cuid2";
 import { genSalt, hashSync } from "bcrypt-ts";
-import { revalidatePath } from "next/cache";
 
 export const registerUser = async (prevState: any, formData: FormData) => {
-  console.log(formData);
   const data = {
     email: formData.get("email") as string,
     firstName: formData.get("firstName") as string,
