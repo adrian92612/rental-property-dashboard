@@ -29,11 +29,11 @@ body,
 }
 
 .detail-container {
-  @apply flex flex-col justify-center items-center my-4;
+  @apply flex flex-wrap my-5 p-8 gap-5 h-full justify-center;
 }
 
 .detail-card {
-  @apply flex flex-col p-2 w-full max-w-[400px] bg-gray-100 border h-fit rounded-xl text-cyan-900 shadow-lg shadow-slate-400;
+  @apply flex flex-col p-5 w-full max-w-lg h-80 bg-gray-100 border border-cyan-900 rounded-xl text-cyan-900 shadow-lg shadow-slate-600;
 }
 
 .detail-card-h2 {

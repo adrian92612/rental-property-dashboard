@@ -8,7 +8,7 @@ interface Props {
 
 const DashboardLayout = async ({ children }: Props) => {
   return (
-    <div className="h-screen flex flex-col sm:flex-row">
+    <div className="h-screen flex flex-col sm:flex-row border-2">
       <SideBar />
       <Suspense fallback={<Loading />}>
         <main className="flex-1 px-2 overflow-y-auto scrollbar-thin pb-8">

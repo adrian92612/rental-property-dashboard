@@ -99,13 +99,11 @@ const UnitDetailsPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="detail-container">
-      <div className="flex flex-col gap-4">
-        <UnitDetails unit={unit} />
-        {unit.tenant && <UnitTenantInfo tenant={unit.tenant} />}
-        <UnitFinancialInfo />
-        <UnitMaintenanceInspection />
-        <UnitAttachments />
-      </div>
+      <UnitDetails unit={unit} />
+      {unit.tenant && <UnitTenantInfo tenant={unit.tenant} />}
+      <UnitFinancialInfo />
+      <UnitMaintenanceInspection />
+      <UnitAttachments />
     </div>
   );
 };
