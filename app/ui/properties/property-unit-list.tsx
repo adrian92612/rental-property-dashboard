@@ -108,8 +108,6 @@ export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
         </div>
       </div>
 
-      {/* {paginatedUnits && (
-        <> */}
       <ul>
         <Headings />
         {!!paginatedUnits.length &&
@@ -121,6 +119,7 @@ export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
             </Link>
           ))}
       </ul>
+
       <div className="flex items-center gap-4 justify-end pr-4 text-lg mt-auto">
         <button
           onClick={handlePrevPage}
@@ -138,8 +137,6 @@ export const UnitList = ({ units }: { units: UnitWithTenant[] }) => {
           <FaArrowCircleRight />
         </button>
       </div>
-      {/* </>
-      )} */}
     </section>
   );
 };

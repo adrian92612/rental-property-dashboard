@@ -20,20 +20,20 @@ export const UnitsHeadings = ({
   };
 
   return (
-    <div className="flex items-center border-b-2 font-poppins font-bold">
+    <div className="units-cell-container border-b-2 border-cyan-900 font-poppins font-bold">
       <button className="units-cell" onClick={() => requestSort("number")}>
         Unit No. {getSortIndicator("number")}
       </button>
       {!hideProperty && (
         <button className="units-cell" onClick={() => requestSort("property")}>
-          Property Name {getSortIndicator("property")}
+          Property {getSortIndicator("property")}
         </button>
       )}
       <button
         className="units-cell hidden xs:block"
         onClick={() => requestSort("rentAmount")}
       >
-        Rent Amount {getSortIndicator("rentAmount")}
+        Rent {getSortIndicator("rentAmount")}
       </button>
       <button
         className="units-cell hidden sm:block"

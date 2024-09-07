@@ -16,8 +16,12 @@ body,
   @apply font-poppins text-lg;
 }
 
+.units-cell-container {
+  @apply flex items-center justify-between gap-4;
+}
+
 .units-cell {
-  @apply flex-1 p-2 text-left;
+  @apply flex-1 max-w-24 text-left;
 }
 
 .units-cell-sm {
