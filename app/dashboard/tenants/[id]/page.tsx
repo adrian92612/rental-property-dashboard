@@ -1,6 +1,7 @@
 import { getProperty } from "@/app/lib/actions-properties";
 import { getTenant } from "@/app/lib/actions-tenants";
 import { formatDate } from "@/app/lib/helpers";
+import { DeleteBtn } from "@/app/ui/delete-button";
 import { DeleteEditBtn } from "@/app/ui/delete-edit-button";
 import { Tenant, Unit } from "@prisma/client";
 
@@ -26,7 +27,8 @@ const TenantDetails = ({ tenant }: { tenant: Tenant }) => {
       <p>Start Date: {formatDate(tenant.leaseStart)}</p>
       <p>End Date: {formatDate(tenant.leaseEnd)}</p>
       <p>Status: {getStatus()}</p>
-      <DeleteEditBtn id={tenant.id} model={"tenant"} />
+      {/* <DeleteEditBtn id={tenant.id} model={"tenant"} /> */}
+      <DeleteBtn id={tenant.id} model={"tenant"} />
       <button className="detail-card-btn">Send Rent Reminder</button>
     </div>
   );

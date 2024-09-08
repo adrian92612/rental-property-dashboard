@@ -154,7 +154,6 @@ export const deleteTenant = async (tenantId: string) => {
     return {
       success: false,
       message: `Failed to delete tenant ${tenantId}.`,
-      error,
     };
   }
 };
