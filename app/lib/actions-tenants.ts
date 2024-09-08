@@ -54,7 +54,7 @@ export const getTenantWithUnit = async (
 
 export const upsertTenant = async (prevState: any, formData: FormData) => {
   const data: TenantFormData = {
-    tenantId: formData.get("tenantId") as string,
+    tenantId: (formData.get("tenantId") as string) ?? undefined,
     unitId: (formData.get("unitId") as string) ?? undefined,
     firstName: formData.get("firstName") as string,
     lastName: formData.get("lastName") as string,

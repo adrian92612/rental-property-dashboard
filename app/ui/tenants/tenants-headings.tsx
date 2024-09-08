@@ -27,13 +27,13 @@ export const TenantsHeadings = ({
         Last Name {getSortIndicator("lastName")}
       </button>
       <button
-        className="units-cell hidden xs:block"
+        className="units-cell hidden sm:block"
         onClick={() => requestSort("email")}
       >
         Email {getSortIndicator("email")}
       </button>
       <button
-        className="units-cell hidden sm:block"
+        className="units-cell hidden lg:block"
         onClick={() => requestSort("phoneNumber")}
       >
         Contact No. {getSortIndicator("phoneNumber")}

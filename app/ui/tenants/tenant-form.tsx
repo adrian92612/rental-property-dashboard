@@ -28,7 +28,7 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
     }),
   });
 
-  console.log(state);
+  console.log("STATE: ", state);
 
   const [term, setTerm] = useState(tenant ? state.termInMonths : 1);
   const [termStart, setTermStart] = useState(tenant ? state.leaseStart : "");
@@ -79,7 +79,11 @@ export const TenantForm = ({ tenant = null }: TenantFormProps) => {
 
   return (
     <form action={action} className="flex flex-col" noValidate={true}>
-      <input type="hidden" name="tenantId" defaultValue={tenant?.id} />
+      <input
+        type="hidden"
+        name="tenantId"
+        defaultValue={tenant?.id ?? undefined}
+      />
       <input
         type="hidden"
         name="unitId"

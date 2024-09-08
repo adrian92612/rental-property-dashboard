@@ -59,25 +59,23 @@ export const DeleteEditBtn = ({ id, model }: Props) => {
   return (
     <div>
       {!toggleDelete ? (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 w-fit border">
+          <Link
+            href={`/dashboard/${route}/${id}/edit`}
+            className="flex items-center italic border border-transparent rounded-sm hover:border-rose-400 hover:text-rose-400"
+          >
+            <FaEdit />
+          </Link>
           <button
-            className="flex items-center italic pr-1 border border-transparent rounded-sm hover:border-rose-400 hover:text-rose-400"
+            className="flex items-center italic border border-transparent rounded-sm hover:border-rose-500 hover:text-rose-500"
             onClick={handleToggleDelete}
           >
             <MdDelete />
-            Delete
           </button>
-          <Link
-            href={`/dashboard/${route}/${id}/edit`}
-            className="flex items-center italic px-1 border border-transparent rounded-sm hover:border-rose-400 hover:text-rose-400"
-          >
-            <FaEdit />
-            Edit
-          </Link>
         </div>
       ) : (
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <p className="font-bold">Confirm delete?</p>
             <button onClick={handleDelete} className="hover:text-rose-400">
               {isPending ? "Deleting..." : "Yes"}

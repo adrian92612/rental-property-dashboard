@@ -5,6 +5,7 @@ import { UnitsHeadings } from "./units-heading";
 import Link from "next/link";
 import { UnitCard } from "./unit-card";
 import { useState } from "react";
+import { DeleteEditBtn } from "../delete-edit-button";
 
 type UnitListProps = {
   units: UnitWithPropertyTenantName[];
@@ -59,6 +60,9 @@ export const UnitList = ({ units }: UnitListProps) => {
       {!!units.length &&
         sortedUnits.map((unit) => (
           <Link key={unit.id} href={`/dashboard/units/${unit.id}`}>
+            <div className="flex items-center justify-end">
+              <DeleteEditBtn id={unit.id} model={"unit"} />
+            </div>
             <UnitCard unit={unit} />
           </Link>
         ))}
