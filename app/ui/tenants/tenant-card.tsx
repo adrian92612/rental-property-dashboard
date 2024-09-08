@@ -13,7 +13,7 @@ export const TenantCard = ({ tenant }: UnitCardProps) => {
       <div className="units-cell">{tenant.lastName}</div>
       <div className="units-cell hidden sm:block">{tenant.email}</div>
       <div className="units-cell hidden lg:block">{tenant.phoneNumber}</div>
-      <div className="units-cell border">
+      <div className="units-cell max-w-24">
         {tenant.unitId ? "Assigned" : "Unassigned"}
       </div>
     </div>

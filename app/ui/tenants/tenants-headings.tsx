@@ -38,7 +38,10 @@ export const TenantsHeadings = ({
       >
         Contact No. {getSortIndicator("phoneNumber")}
       </button>
-      <button className="units-cell" onClick={() => requestSort("unitId")}>
+      <button
+        className="units-cell max-w-24"
+        onClick={() => requestSort("unitId")}
+      >
         Status {getSortIndicator("unitId")}
       </button>
     </div>
